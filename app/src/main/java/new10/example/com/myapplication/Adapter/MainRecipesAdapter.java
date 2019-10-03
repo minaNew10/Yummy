@@ -19,6 +19,10 @@ import new10.example.com.myapplication.R;
 
 public class MainRecipesAdapter extends RecyclerView.Adapter<MainRecipesAdapter.RecipeViewHolder> {
     List<Recipe> recipes = new ArrayList<>();
+    MainRecipesListener mainRecipesListener;
+    public interface MainRecipesListener{
+        public void onClick(Recipe currRecipe);
+    }
 
     public MainRecipesAdapter() {
 
@@ -27,6 +31,10 @@ public class MainRecipesAdapter extends RecyclerView.Adapter<MainRecipesAdapter.
     public void setRecipes(List<Recipe> recipes) {
         this.recipes = recipes;
         notifyDataSetChanged();
+    }
+
+    public MainRecipesAdapter( MainRecipesListener mainRecipesListener) {
+        this.mainRecipesListener = mainRecipesListener;
     }
 
     @NonNull
@@ -49,7 +57,7 @@ public class MainRecipesAdapter extends RecyclerView.Adapter<MainRecipesAdapter.
         return recipes.size();
     }
 
-    public class RecipeViewHolder extends RecyclerView.ViewHolder {
+    public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @BindView(R.id.txtv_name_item)
         TextView textView;
         @BindView(R.id.imgv_main_recycler_item)
@@ -57,6 +65,12 @@ public class MainRecipesAdapter extends RecyclerView.Adapter<MainRecipesAdapter.
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            mainRecipesListener.onClick(recipes.get(getAdapterPosition()));
         }
     }
 }

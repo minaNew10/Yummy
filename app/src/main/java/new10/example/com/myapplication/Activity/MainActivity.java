@@ -1,4 +1,4 @@
-package new10.example.com.myapplication;
+package new10.example.com.myapplication.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import new10.example.com.myapplication.Fragment.RecipesRecyclerFragment;
+import new10.example.com.myapplication.R;
 
 public class MainActivity extends AppCompatActivity {
     @Override
