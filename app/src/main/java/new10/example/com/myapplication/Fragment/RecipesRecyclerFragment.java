@@ -44,7 +44,7 @@ public class RecipesRecyclerFragment extends Fragment implements MainRecipesAdap
         super.onActivityCreated(savedInstanceState);
         //we intialize the view model here and not in oncreate because we want the data to be updated every time we create a view as
         // there is alife cycle for the fragmet instance and another for the view it contains so if we set the view model in oncreate
-        //the data will not be updated as it is linked to the life cycle of the fragment it self
+        //the data will not be updated as it is linked to the life cycle of the fragment itself we also want to be sure that the Activity is created
         viewModel = ViewModelProviders.of(getActivity()).get(MainRecipesViewModel.class);
         MutableLiveData<List<Recipe>> recipes =  viewModel.getRecipes();
         //if we pass this in the observe it get linked to the life cycle of the fragment instance not the view which means it's only remove

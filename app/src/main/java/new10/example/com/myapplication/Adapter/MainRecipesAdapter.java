@@ -20,8 +20,9 @@ import new10.example.com.myapplication.R;
 public class MainRecipesAdapter extends RecyclerView.Adapter<MainRecipesAdapter.RecipeViewHolder> {
     List<Recipe> recipes = new ArrayList<>();
     MainRecipesListener mainRecipesListener;
+
     public interface MainRecipesListener{
-        public void onClick(Recipe currRecipe);
+        void onClick(Recipe currRecipe);
     }
 
     public MainRecipesAdapter() {
