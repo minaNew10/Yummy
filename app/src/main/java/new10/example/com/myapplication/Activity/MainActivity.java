@@ -17,12 +17,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        RecipesRecyclerFragment fragment = new RecipesRecyclerFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .add(R.id.recipes_List_fragment_container,fragment)
-                .commit();
+        if(savedInstanceState == null) {
+            RecipesRecyclerFragment fragment = new RecipesRecyclerFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .add(R.id.recipes_List_fragment_container, fragment,getString(R.string.recipes_list_fragment_tag))
+                    .commit();
+        }else {
+            RecipesRecyclerFragment fragment = (RecipesRecyclerFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.recipes_list_fragment_tag));
+        }
 
     }
 }
