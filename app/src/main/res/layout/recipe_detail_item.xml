@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/txtv_recipe_detail_item"
-    android:layout_width="wrap_content" android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/textview_padding"
+    android:background="@drawable/textview_background"
+    android:gravity="center_horizontal|center_vertical"
+    android:elevation="@dimen/textview_elevation"
+    android:textColor="@color/colorPrimary"
+    android:textAlignment="center"
+    android:layout_margin="@dimen/textview_margin"
+    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+    android:textSize="30sp">
 
 </TextView>

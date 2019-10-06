@@ -24,11 +24,20 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecipeDetailsAdap
     }
 
 
+    public RecipeDetailsAdapter(Context context, Recipe recipe) {
+        this.context = context;
+        this.recipe = recipe;
+    }
 
-    public RecipeDetailsAdapter(Context context,Recipe recipe, RecipeDetailsListener recipeDetailsListener) {
+    public RecipeDetailsAdapter(Context context, Recipe recipe, RecipeDetailsListener recipeDetailsListener) {
         this.context = context;
         this.recipe = recipe;
         this.recipeDetailsListener = recipeDetailsListener;
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+        notifyDataSetChanged();
     }
 
     @NonNull

@@ -1,5 +1,6 @@
 package new10.example.com.myapplication.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
+import new10.example.com.myapplication.Activity.RecipeActivity;
 import new10.example.com.myapplication.Adapter.MainRecipesAdapter;
 import new10.example.com.myapplication.Common.Common;
 import new10.example.com.myapplication.Model.Recipe;
@@ -79,10 +81,9 @@ public class RecipesRecyclerFragment extends Fragment implements MainRecipesAdap
     @Override
     public void onClick(Recipe currRecipe) {
         Common.currRecipe = currRecipe;
-        if(toast != null)
-            toast.cancel();
-        toast = Toast.makeText(getActivity(),currRecipe.getName(),Toast.LENGTH_LONG);
-        toast.show();
+        Intent intent = new Intent(getActivity(), RecipeActivity.class);
+        intent.putExtra(getString(R.string.recipe_tag),currRecipe);
+        startActivity(intent);
     }
 
 

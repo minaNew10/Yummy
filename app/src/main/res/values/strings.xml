@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Yummy</string>
     <string name="ingredients">Ingredients</string>
-    <string name="recipes_list_fragment_tag">recipes fragment tag</string>
+    <string name="recipes_list_fragment_tag" translatable="false">recipes fragment tag</string>
+    <string name="recipe_tag" translatable="false">recipe</string>
+    <string name="recipe_fragment_tag" translatable="false">recipe fragment_tag</string>
 </resources>

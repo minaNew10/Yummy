@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="txtv_menu_item_text_size">20sp</dimen>
+    <dimen name="textview_border_width">2dp</dimen>
+
+    <dimen name="textview_margin">8dp</dimen>
+    <dimen name="textview_padding">8dp</dimen>
+    <dimen name="textview_radius">4dp</dimen>
+    <dimen name="textview_elevation">4dp</dimen>
 </resources>
