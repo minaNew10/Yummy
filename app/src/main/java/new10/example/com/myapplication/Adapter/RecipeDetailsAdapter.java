@@ -20,7 +20,7 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecipeDetailsAdap
     RecipeDetailsListener recipeDetailsListener;
 
     public interface RecipeDetailsListener{
-        void onClick(Recipe recipe);
+        void onClick(Recipe recipe,int position);
     }
 
 
@@ -76,7 +76,7 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecipeDetailsAdap
 
         @Override
         public void onClick(View view) {
-            recipeDetailsListener.onClick(recipe);
+            recipeDetailsListener.onClick(recipe,getAdapterPosition());
         }
     }
     }

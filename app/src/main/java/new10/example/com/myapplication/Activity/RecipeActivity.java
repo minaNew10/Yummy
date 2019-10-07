@@ -3,6 +3,7 @@ package new10.example.com.myapplication.Activity;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
@@ -10,11 +11,14 @@ import android.widget.Toast;
 
 import new10.example.com.myapplication.Fragment.RecipeFragment;
 import new10.example.com.myapplication.Fragment.RecipesRecyclerFragment;
+import new10.example.com.myapplication.Fragment.StepFragment;
 import new10.example.com.myapplication.Model.Recipe;
+import new10.example.com.myapplication.Model.Step;
 import new10.example.com.myapplication.R;
 import new10.example.com.myapplication.ViewModel.RecipeDetailsViewModel;
 
-public class RecipeActivity extends AppCompatActivity {
+public class RecipeActivity extends AppCompatActivity implements RecipeFragment.OnStepClickListener {
+
 private RecipeDetailsViewModel recipeDetailsViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,18 @@ private RecipeDetailsViewModel recipeDetailsViewModel;
                     .commit();
         }else {
             RecipeFragment fragment = (RecipeFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.recipe_fragment_tag));
+        }
+    }
+
+    @Override
+    public void onStepSelected(Recipe recipe, int position) {
+        if(position == 0){
+
+        }else {
+            StepFragment stepFragment = new StepFragment();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.recipe_fragment_container,stepFragment);
+            ft.commit();
         }
     }
 }
