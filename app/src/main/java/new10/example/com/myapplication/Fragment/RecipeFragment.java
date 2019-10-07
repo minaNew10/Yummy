@@ -47,7 +47,6 @@ public class RecipeFragment extends Fragment implements RecipeDetailsAdapter.Rec
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipe_detail,container,false);
         ButterKnife.bind(this,view);
-
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getActivity(),RecyclerView.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new RecipeDetailsAdapter(getActivity(),currRecipe,this);

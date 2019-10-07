@@ -4,4 +4,5 @@
     <string name="recipes_list_fragment_tag" translatable="false">recipes fragment tag</string>
     <string name="recipe_tag" translatable="false">recipe</string>
     <string name="recipe_fragment_tag" translatable="false">recipe fragment_tag</string>
+    <string name="key_step" translatable="false">step</string>
 </resources>

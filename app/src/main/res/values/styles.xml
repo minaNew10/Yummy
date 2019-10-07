@@ -14,6 +14,15 @@
         <item name="android:textColor">@color/primaryText</item>
         <item name="android:textSize">@dimen/txtv_menu_item_text_size</item>
     </style>
+    <style name="DetailViewTexts">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:padding">8dp</item>
+    </style>
 
 
 </resources>

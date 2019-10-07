@@ -45,10 +45,13 @@ private RecipeDetailsViewModel recipeDetailsViewModel;
 
     @Override
     public void onStepSelected(Recipe recipe, int position) {
+        Bundle b = new Bundle();
         if(position == 0){
 
         }else {
+            b.putParcelable(getString(R.string.key_step),recipe.getSteps().get(position-1));
             StepFragment stepFragment = new StepFragment();
+            stepFragment.setArguments(b);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.recipe_fragment_container,stepFragment);
             ft.commit();
