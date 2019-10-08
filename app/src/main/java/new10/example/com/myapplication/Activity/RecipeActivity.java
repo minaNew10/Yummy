@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import new10.example.com.myapplication.Fragment.RecipeFragment;
 import new10.example.com.myapplication.Fragment.RecipesRecyclerFragment;
 import new10.example.com.myapplication.Fragment.StepFragment;
@@ -25,10 +27,10 @@ private RecipeDetailsViewModel recipeDetailsViewModel;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
         Bundle bundle = getIntent().getExtras();
+
         Recipe recipe = bundle.getParcelable(getString(R.string.recipe_tag));
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(recipe.getName());
+        setActionBarTitle(recipe.getName());
 
         recipeDetailsViewModel = ViewModelProviders.of(this).get(RecipeDetailsViewModel.class);
         recipeDetailsViewModel.setRecipe(recipe);
@@ -49,12 +51,18 @@ private RecipeDetailsViewModel recipeDetailsViewModel;
         if(position == 0){
 
         }else {
-            b.putParcelable(getString(R.string.key_step),recipe.getSteps().get(position-1));
+            b.putParcelableArrayList(getString(R.string.key_steps),(ArrayList<Step>) recipe.getSteps());
+            b.putInt(getString(R.string.key_position),position);
+            b.putString(getString(R.string.key_recipe_name),recipe.getName());
             StepFragment stepFragment = new StepFragment();
+
             stepFragment.setArguments(b);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.recipe_fragment_container,stepFragment);
+            ft.replace(R.id.recipe_fragment_container,stepFragment,getString(R.string.tag_step_fragment));
             ft.commit();
         }
+    }
+    public void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle(title);
     }
 }

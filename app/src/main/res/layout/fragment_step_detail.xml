@@ -33,7 +33,7 @@
             app:layout_constraintTop_toBottomOf="@+id/video_view" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/imgv_prev"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -43,7 +43,7 @@
             app:srcCompat="@drawable/ic_chevron_left" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/imgv_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -51,6 +51,5 @@
             app:layout_constraintEnd_toEndOf="@+id/txtv_instruction"
             app:layout_constraintTop_toBottomOf="@+id/txtv_instruction"
             app:srcCompat="@drawable/ic_chevron_right" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

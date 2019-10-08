@@ -70,7 +70,7 @@ public class RecipesRecyclerFragment extends Fragment implements MainRecipesAdap
         ButterKnife.bind(this,view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getActivity(),RecyclerView.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new MainRecipesAdapter(this);
+        adapter = new MainRecipesAdapter(getActivity(),this);
         recyclerView.setAdapter(adapter);
         toast = Toast.makeText(getActivity(),"",Toast.LENGTH_LONG);
         return view;

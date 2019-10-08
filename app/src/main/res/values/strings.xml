@@ -4,5 +4,12 @@
     <string name="recipes_list_fragment_tag" translatable="false">recipes fragment tag</string>
     <string name="recipe_tag" translatable="false">recipe</string>
     <string name="recipe_fragment_tag" translatable="false">recipe fragment_tag</string>
-    <string name="key_step" translatable="false">step</string>
+    <string name="key_steps" translatable="false">steps list</string>
+    <string name="nutella_pie">nutella pie</string>
+    <string name="brownies">brownies</string>
+    <string name="yellow_cake">yellow cake</string>
+    <string name="cheese_cake">cheesecake</string>
+    <string name="key_position">position</string>
+    <string name="tag_step_fragment" translatable="false">step fragment</string>
+    <string name="key_recipe_name">recipe name</string>
 </resources>

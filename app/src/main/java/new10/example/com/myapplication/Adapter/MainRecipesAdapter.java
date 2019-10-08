@@ -1,5 +1,6 @@
 package new10.example.com.myapplication.Adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ import new10.example.com.myapplication.R;
 public class MainRecipesAdapter extends RecyclerView.Adapter<MainRecipesAdapter.RecipeViewHolder> {
     List<Recipe> recipes = new ArrayList<>();
     MainRecipesListener mainRecipesListener;
-
+    Context context;
     public interface MainRecipesListener{
         void onClick(Recipe currRecipe);
     }
@@ -34,7 +35,8 @@ public class MainRecipesAdapter extends RecyclerView.Adapter<MainRecipesAdapter.
         notifyDataSetChanged();
     }
 
-    public MainRecipesAdapter( MainRecipesListener mainRecipesListener) {
+    public MainRecipesAdapter(Context context, MainRecipesListener mainRecipesListener) {
+        this.context = context;
         this.mainRecipesListener = mainRecipesListener;
     }
 
@@ -49,10 +51,19 @@ public class MainRecipesAdapter extends RecyclerView.Adapter<MainRecipesAdapter.
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
         Recipe recipe = recipes.get(position);
         holder.textView.setText(recipe.getName());
+        if(recipe.getName().equalsIgnoreCase(context.getString(R.string.yellow_cake))){
+            holder.imageView.setImageResource(R.drawable.yellow_cake);
+        }else if(recipe.getName().equalsIgnoreCase(context.getString(R.string.brownies))){
+            holder.imageView.setImageResource(R.drawable.brownies);
+        }else if(recipe.getName().equalsIgnoreCase(context.getString(R.string.cheese_cake))) {
+            holder.imageView.setImageResource(R.drawable.cheese_cake);
+        }else{
+            holder.imageView.setImageResource(R.drawable.nutella_pie);
+        }
     }
 
     @Override
-    public int getItemCount() {
+    public int getItemCount(){
         if(recipes == null)
             return 0;
         return recipes.size();
