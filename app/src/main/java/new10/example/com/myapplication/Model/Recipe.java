@@ -3,16 +3,41 @@ package new10.example.com.myapplication.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity(tableName = "recipe")
 public class Recipe implements Parcelable {
+    @PrimaryKey(autoGenerate = true)
     private int id;
     private String name;
+    @Ignore
     private List<Ingredient> ingredients;
+    @Ignore
     private List<Step> steps;
     private int servings;
     private String image;
+
+    @Ignore
+    public Recipe(int id, String name, List<Ingredient> ingredients, List<Step> steps, int servings, String image) {
+        this.id = id;
+        this.name = name;
+        this.ingredients = ingredients;
+        this.steps = steps;
+        this.servings = servings;
+        this.image = image;
+    }
+
+    public Recipe(int id, String name, int servings, String image) {
+        this.id = id;
+        this.name = name;
+        this.servings = servings;
+        this.image = image;
+    }
 
     protected Recipe(Parcel in){
         id = in.readInt();
@@ -25,14 +50,6 @@ public class Recipe implements Parcelable {
         image = in.readString();
     }
 
-    public Recipe(int id, String name, List<Ingredient> ingredients, List<Step> steps, int servings, String image) {
-        this.id = id;
-        this.name = name;
-        this.ingredients = ingredients;
-        this.steps = steps;
-        this.servings = servings;
-        this.image = image;
-    }
     public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
         @Override
         public Recipe createFromParcel(Parcel in) {
@@ -44,6 +61,14 @@ public class Recipe implements Parcelable {
             return new Recipe[size];
         }
     };
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public void setSteps(List<Step> steps) {
+        this.steps = steps;
+    }
 
     public int getId() {
         return id;

@@ -12,4 +12,7 @@
     <string name="key_position">position</string>
     <string name="tag_step_fragment" translatable="false">step fragment</string>
     <string name="key_recipe_name">recipe name</string>
+    <string name="add_to_favourites">Add to favourites</string>
+    <string name="show_fav_recipes">Favourites</string>
+    <string name="key_Favourites" translatable="false">favourites</string>
 </resources>

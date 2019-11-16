@@ -3,18 +3,33 @@ package new10.example.com.myapplication.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.PrimaryKey;
+
 import java.util.ArrayList;
 
+import static androidx.room.ForeignKey.CASCADE;
+
+
+@Entity(tableName = "ingredient",foreignKeys = @ForeignKey(entity = Recipe.class,parentColumns = "id",childColumns = "recipe_id",onDelete = CASCADE))
 public class Ingredient implements Parcelable {
+    @PrimaryKey(autoGenerate = true)
+    public int id;
     private float quantity;
     private String measure;
     // at database is "ingredient"
     private String name;
+    public int recipe_id;
 
     public Ingredient(float quantity, String measure, String name) {
         this.quantity = quantity;
         this.measure = measure;
         this.name = name;
+    }
+
+    public void setRecipe_id(int recipe_id) {
+        this.recipe_id = recipe_id;
     }
 
     public float getQuantity() {

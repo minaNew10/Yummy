@@ -1,6 +1,7 @@
 package new10.example.com.myapplication.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,7 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecipeDetailsAdap
     Context context;
     Recipe recipe;
     RecipeDetailsListener recipeDetailsListener;
-
+    private static final String TAG = "RecipeDetailsAdapter";
     public interface RecipeDetailsListener{
         void onClick(Recipe recipe,int position);
     }
