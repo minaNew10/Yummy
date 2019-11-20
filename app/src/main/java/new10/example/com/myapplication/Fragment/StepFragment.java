@@ -130,9 +130,22 @@ public class StepFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(getString(R.string.key_title_recipe_name),oldTitle);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if(savedInstanceState != null)
+            oldTitle = savedInstanceState.getString(getString(R.string.key_title_recipe_name));
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-         oldTitle = ((RecipeActivity) getActivity()).getSupportActionBar().getTitle().toString();
+        oldTitle = ((RecipeActivity) getActivity()).getSupportActionBar().getTitle().toString();
     }
 
     @Override

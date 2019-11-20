@@ -1,7 +1,10 @@
 package new10.example.com.myapplication.Model;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.BaseColumns;
 
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -10,17 +13,37 @@ import androidx.room.PrimaryKey;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(tableName = "recipe")
+import new10.example.com.myapplication.Database.RecipeProvider;
+
+@Entity(tableName = Recipe.TABLE_NAME)
 public class Recipe implements Parcelable {
+    /**The name of the Recipe Table*/
+    public static final String TABLE_NAME = "recipe";
+
+    public static final String CONTENT_LIST_TYPE =
+            ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + RecipeProvider.AUTHORITY + "/" + TABLE_NAME;
+public static final String CONTENT_ITEM_TYPE =
+            ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + RecipeProvider.AUTHORITY + "/" + TABLE_NAME;
+
+
+    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_SERVINGS = "servings";
+    public static final String COLUMN_IMAGE = "image";
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String name;
+    private int servings;
+    private String image;
     @Ignore
     private List<Ingredient> ingredients;
     @Ignore
     private List<Step> steps;
-    private int servings;
-    private String image;
+
+
+    @Ignore
+    public Recipe() {
+    }
 
     @Ignore
     public Recipe(int id, String name, List<Ingredient> ingredients, List<Step> steps, int servings, String image) {
@@ -108,4 +131,25 @@ public class Recipe implements Parcelable {
         parcel.writeInt(servings);
         parcel.writeString(image);
     }
+
+    /**
+     * Create a new {@link Recipe} from the specified {@link ContentValues}.
+     *
+     * @param values A {@link ContentValues} that at least contain {@link #name}.
+     * @return A newly created {@link Recipe} instance.
+     *
+     */
+     public static Recipe fromContentValues(ContentValues values){
+         final Recipe recipe = new Recipe();
+         if(values.containsKey(COLUMN_NAME)){
+             recipe.name = values.getAsString(COLUMN_NAME);
+         }
+         if(values.containsKey(COLUMN_IMAGE)){
+             recipe.image = values.getAsString(COLUMN_IMAGE);
+         }
+         if(values.containsKey(COLUMN_SERVINGS)){
+             recipe.servings = values.getAsInteger(COLUMN_SERVINGS);
+         }
+         return recipe;
+     }
 }

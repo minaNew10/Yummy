@@ -6,14 +6,17 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
 
+import new10.example.com.myapplication.Fragment.IngredientFragment;
 import new10.example.com.myapplication.Fragment.RecipeFragment;
 import new10.example.com.myapplication.Fragment.StepFragment;
 
+import new10.example.com.myapplication.Model.Ingredient;
 import new10.example.com.myapplication.Model.Recipe;
 import new10.example.com.myapplication.Model.Step;
 import new10.example.com.myapplication.R;
@@ -49,14 +52,19 @@ private RecipeDetailsViewModel recipeDetailsViewModel;
     @Override
     public void onStepSelected(Recipe recipe, int position) {
         Bundle b = new Bundle();
+        b.putString(getString(R.string.key_recipe_name),recipe.getName());
         if(position == 0){
-
+            b.putParcelableArrayList(getString(R.string.key_ingredients),(ArrayList<Ingredient>) recipe.getIngredients());
+            IngredientFragment ingredientFragment = new IngredientFragment();
+            ingredientFragment.setArguments(b);
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction().addToBackStack(null);
+            ft.replace(R.id.recipe_fragment_container,ingredientFragment,getString(R.string.tag_ingredient_fragment));
+            ft.commit();
         }else {
             b.putParcelableArrayList(getString(R.string.key_steps),(ArrayList<Step>) recipe.getSteps());
             b.putInt(getString(R.string.key_position),position);
-            b.putString(getString(R.string.key_recipe_name),recipe.getName());
-            StepFragment stepFragment = new StepFragment();
 
+            StepFragment stepFragment = new StepFragment();
             stepFragment.setArguments(b);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction().addToBackStack(null);
             ft.replace(R.id.recipe_fragment_container,stepFragment,getString(R.string.tag_step_fragment));

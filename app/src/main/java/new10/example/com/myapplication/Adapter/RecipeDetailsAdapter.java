@@ -53,6 +53,8 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecipeDetailsAdap
         if (position == 0) {
             holder.textView.setText(context.getResources().getString(R.string.ingredients));
         } else {
+            //position is the location including ingredients while steps list is for steps only so
+            //we subtract one from it
             holder.textView.setText(recipe.getSteps().get(position-1).getShortDescription());
         }
     }

@@ -1,14 +1,18 @@
 package new10.example.com.myapplication.Repository;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import androidx.lifecycle.MutableLiveData;
 
 import new10.example.com.myapplication.Database.AppDatabase;
+import new10.example.com.myapplication.Database.RecipeProvider;
 import new10.example.com.myapplication.Model.Ingredient;
 import new10.example.com.myapplication.Model.Recipe;
 import new10.example.com.myapplication.Model.Step;
 import new10.example.com.myapplication.Utils.AppExecutors;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -54,10 +58,8 @@ public class FavRecipeRepository {
                 currRecipe = appDatabase.recipeDao().loadRecipeById(itemId);
 
                 if (currRecipe == null) {
-                    Log.i(TAG, "run: currMovie is null");
                     isFav.postValue(false);
                 } else {
-                    Log.i(TAG, "run: currMovie is not null");
                     isFav.postValue(true);
                 }
             }
@@ -73,16 +75,31 @@ public class FavRecipeRepository {
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {// your insert method from your Dao
-                long id = appDatabase.recipeDao().insert(item);
+                ContentValues recipeValues = new ContentValues();
+                recipeValues.put(Recipe.COLUMN_NAME,item.getName());
+                recipeValues.put(Recipe.COLUMN_SERVINGS,item.getServings());
+                recipeValues.put(Recipe.COLUMN_IMAGE,item.getImage());
+                Uri uri = context.getContentResolver().insert(RecipeProvider.URI_RECIPE,recipeValues);
+                long id = ContentUris.parseId(uri);
+
                 for(int i = 0; i < steps.size();++i){
                     Step step = steps.get(i);
-                    step.setRecipe_id((int)id);
-                    appDatabase.stepDao().insert(step);
+                    ContentValues stepValues = new ContentValues();
+                    stepValues.put(Step.COLUMN_VIDEO_URL,step.getVideoURL());
+                    stepValues.put(Step.COLUMN_THUMBNAIL_URL,step.getThumbnailURL());
+                    stepValues.put(Step.COLUMN_DESCRIPTION,step.getDescription());
+                    stepValues.put(Step.COLUMN_SHORT_DESCRIPTION,step.getShortDescription());
+                    stepValues.put(Step.COLUMN_RECIPE_ID,id);
+                    context.getContentResolver().insert(RecipeProvider.URI_STEP,stepValues);
                 }
                 for(int i = 0; i < ingredients.size();++i){
                     Ingredient ingredient = ingredients.get(i);
-                    ingredient.setRecipe_id((int)id);
-                    appDatabase.ingredientDao().insert(ingredient);
+                    ContentValues ingredientValues = new ContentValues();
+                    ingredientValues.put(Ingredient.COLUMN_MEASURE,ingredient.getMeasure());
+                    ingredientValues.put(Ingredient.COLUMN_QUANTITY,ingredient.getQuantity());
+                    ingredientValues.put(Ingredient.COLUMN_NAME,ingredient.getIngredient());
+                    ingredientValues.put(Ingredient.COLUMN_RECIPE_ID,id);
+                    context.getContentResolver().insert(RecipeProvider.URI_INGREDIENT,ingredientValues);
                 }
             }
         });

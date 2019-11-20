@@ -32,12 +32,7 @@ public class RecipeDetailsViewModel extends ViewModel {
         }
         return recipeLiveData;
     }
-    Handler handler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-        }
-    };
+
 
     public void insertRecipeIntoFav(Recipe recipe,Context context){
         FavRecipeRepository.insertRecipeIntoFav(recipe,context);

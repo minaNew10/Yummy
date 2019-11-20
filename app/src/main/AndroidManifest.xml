@@ -20,6 +20,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:authorities="new10.example.com.myapplication"
+            android:name=".Database.RecipeProvider"
+            android:exported="true"></provider>
     </application>
+    
 
 </manifest>

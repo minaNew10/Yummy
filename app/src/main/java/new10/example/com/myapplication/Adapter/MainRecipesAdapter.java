@@ -37,6 +37,8 @@ public class MainRecipesAdapter extends RecyclerView.Adapter<MainRecipesAdapter.
         notifyDataSetChanged();
     }
 
+
+
     public MainRecipesAdapter(Context context, MainRecipesListener mainRecipesListener) {
         this.context = context;
         this.mainRecipesListener = mainRecipesListener;
@@ -53,6 +55,7 @@ public class MainRecipesAdapter extends RecyclerView.Adapter<MainRecipesAdapter.
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
         Recipe recipe = recipes.get(position);
         holder.textView.setText(recipe.getName());
+        Log.i(TAG, "onBindViewHolder: " + recipe.getName());
         if(recipe.getName().equalsIgnoreCase(context.getString(R.string.yellow_cake))){
             holder.imageView.setImageResource(R.drawable.yellow_cake);
         }else if(recipe.getName().equalsIgnoreCase(context.getString(R.string.brownies))){

@@ -1,5 +1,7 @@
 package new10.example.com.myapplication.Database;
 
+import android.database.Cursor;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -14,13 +16,16 @@ import new10.example.com.myapplication.Model.Step;
 @Dao
 public interface StepDao {
     @Insert
-    void insert(Step step);
+    long insert(Step step);
 
     @Delete
     void delete(Step... steps);
 
     @Query("SELECT * FROM step")
     List<Step> getAllSteps();
+
+    @Query("SELECT * FROM step")
+    Cursor getAllStepsInCursor();
 
     @Query("SElECT * FROM step WHERE recipe_id =:recipe_id")
     LiveData<List<Step>> findStepsForRecipe(int recipe_id);

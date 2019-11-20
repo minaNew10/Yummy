@@ -1,5 +1,7 @@
 package new10.example.com.myapplication.Database;
 
+import android.database.Cursor;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Dao;
@@ -21,11 +23,19 @@ public interface RecipeDao {
     @Delete
     void delete(Recipe... recipes);
 
+    @Query("DELETE FROM " + Recipe.TABLE_NAME + " WHERE "+ Recipe.COLUMN_ID  + " = :id")
+    int deleteById(long id);
+
     @Query("SELECT * FROM recipe")
     LiveData<List<Recipe>> getAllRecipes();
 
+    @Query("SELECT * FROM recipe")
+    Cursor getAllRecipesInCursor();
+
+
     @Query("SELECT * FROM recipe WHERE id  = :id")
     Recipe loadRecipeById(int id);
+
 
 
 }

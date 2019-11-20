@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.BindViews;
+
 import butterknife.ButterKnife;
 import new10.example.com.myapplication.Activity.RecipeActivity;
 import new10.example.com.myapplication.Adapter.MainRecipesAdapter;
