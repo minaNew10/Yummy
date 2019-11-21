@@ -1,18 +1,12 @@
 package new10.example.com.myapplication.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
-
 import java.util.List;
-
-
 import new10.example.com.myapplication.Fragment.RecipesRecyclerFragment;
 import new10.example.com.myapplication.Model.Recipe;
 import new10.example.com.myapplication.R;

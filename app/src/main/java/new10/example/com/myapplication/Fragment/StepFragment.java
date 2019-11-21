@@ -16,6 +16,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -37,13 +41,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import new10.example.com.myapplication.Activity.RecipeActivity;
 
+import new10.example.com.myapplication.Model.Recipe;
 import new10.example.com.myapplication.Model.Step;
 import new10.example.com.myapplication.R;
+import new10.example.com.myapplication.ViewModel.RecipeDetailsViewModel;
 
 public class StepFragment extends Fragment {
     private static final String TAG = "StepFragment";
-    private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
-    ArrayList<Step> parcelableSteps;
+    ArrayList<Step> steps;
     int position;
     Step s;
     String oldTitle;
@@ -51,6 +56,7 @@ public class StepFragment extends Fragment {
     private boolean playWhenReady = true;
     private long playbackPosition ;
     private int currentWindow;
+    private RecipeDetailsViewModel viewModel;
     @BindView(R.id.txtv_instruction) TextView tvInstruction;
     @BindView(R.id.video_view) PlayerView playerView;
     @BindView(R.id.imgv_prev) ImageView imgPrev;
@@ -59,26 +65,15 @@ public class StepFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_step_detail,container,false);
-
         ButterKnife.bind(this,v);
         Bundle b = getArguments();
-        if( b.getParcelableArrayList(getString(R.string.key_steps)) != null)
-          parcelableSteps = b.getParcelableArrayList(getString(R.string.key_steps));
-
         position = b.getInt(getString(R.string.key_position));
-        s = parcelableSteps.get(position-1);
-        tvInstruction.setText(s.getDescription());
+
+
         if(position-1 == 0){
             imgPrev.setClickable(false);
             imgPrev.setAlpha(0.5f);
         }
-        if(position-1 == parcelableSteps.size()-1){
-            imgNext.setClickable(false);
-            imgNext.setAlpha(0.5f);
-        }
-
-//        Uri videoUri = Uri.parse(s.getVideoURL());
-
 
 
         return v;
@@ -87,7 +82,20 @@ public class StepFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        viewModel = ViewModelProviders.of(getActivity()).get(RecipeDetailsViewModel.class);
+        MutableLiveData<Recipe> recipe = viewModel.getRecipe();
+        recipe.observe(getViewLifecycleOwner(), new Observer<Recipe>() {
+            @Override
+            public void onChanged(Recipe recipe) {
+                steps = (ArrayList) recipe.getSteps();
+                s = steps.get(position-1);
+                tvInstruction.setText(s.getDescription());
+                if(position-1 == steps.size()-1){
+                    imgNext.setClickable(false);
+                    imgNext.setAlpha(0.5f);
+                }
+            }
+        });
 
     }
 
@@ -156,7 +164,7 @@ public class StepFragment extends Fragment {
             initializePlayer();
         }
 
-        ((RecipeActivity)getActivity()).setActionBarTitle(oldTitle + " " + "(" + parcelableSteps.get(position-1).getShortDescription() + ")");
+        ((RecipeActivity)getActivity()).setActionBarTitle(oldTitle + " " + "(" + steps.get(position-1).getShortDescription() + ")");
     }
 
     @SuppressLint("InlinedApi")
