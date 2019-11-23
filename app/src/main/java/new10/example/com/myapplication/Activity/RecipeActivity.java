@@ -53,22 +53,25 @@ private RecipeDetailsViewModel recipeDetailsViewModel;
     public void onStepSelected(Recipe recipe, int position) {
         Bundle b = new Bundle();
         b.putString(getString(R.string.key_recipe_name),recipe.getName());
+        //there is no need to pass neither the ingredients nor the steps list
+        //as it is received from the viewModel
         if(position == 0){
-            b.putParcelableArrayList(getString(R.string.key_ingredients),(ArrayList<Ingredient>) recipe.getIngredients());
+
             IngredientFragment ingredientFragment = new IngredientFragment();
             ingredientFragment.setArguments(b);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction().addToBackStack(null);
             ft.replace(R.id.recipe_fragment_container,ingredientFragment,getString(R.string.tag_ingredient_fragment));
             ft.commit();
-        }else {
-            b.putParcelableArrayList(getString(R.string.key_steps),(ArrayList<Step>) recipe.getSteps());
-            b.putInt(getString(R.string.key_position),position);
 
+        }else {
+
+            b.putInt(getString(R.string.key_position),position);
             StepFragment stepFragment = new StepFragment();
             stepFragment.setArguments(b);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction().addToBackStack(null);
             ft.replace(R.id.recipe_fragment_container,stepFragment,getString(R.string.tag_step_fragment));
             ft.commit();
+
         }
     }
 

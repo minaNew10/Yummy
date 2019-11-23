@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -24,6 +26,7 @@ import java.util.List;
 import butterknife.BindView;
 
 import butterknife.ButterKnife;
+import new10.example.com.myapplication.Activity.MainActivity;
 import new10.example.com.myapplication.Activity.RecipeActivity;
 import new10.example.com.myapplication.Adapter.MainRecipesAdapter;
 import new10.example.com.myapplication.Common.Common;
@@ -41,10 +44,7 @@ public class RecipesRecyclerFragment extends Fragment implements MainRecipesAdap
     MainRecipesAdapter adapter;
     private MainRecipesViewModel viewModel;
     Toast toast;
-    OnRecipesChangedListener onRecipesChangedListener;
-    public interface OnRecipesChangedListener{
-        void onRecipesChanged(List<Recipe> recipes);
-    }
+    Bundle b;
     public RecipesRecyclerFragment() {
     }
     //we use this method to be sure that we are using the view model of the activity
@@ -55,9 +55,9 @@ public class RecipesRecyclerFragment extends Fragment implements MainRecipesAdap
         // there is alife cycle for the fragmet instance and another for the view it contains so if we set the view model in oncreate
         //the data will not be updated as it is linked to the life cycle of the fragment itself we also want to be sure that the Activity is created
         viewModel = ViewModelProviders.of(getActivity()).get(MainRecipesViewModel.class);
-        Bundle b = getArguments();
+         b = getArguments();
         if(b != null && b.get(getString(R.string.key_Favourites)).equals(getString(R.string.show_fav_recipes))){
-
+            ((MainActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.show_fav_recipes));
             viewModel.getFavRecipes(getActivity()).observe(getViewLifecycleOwner(), new Observer<List<Recipe>>() {
                 @Override
                 public void onChanged(List<Recipe> recipes) {
@@ -82,6 +82,7 @@ public class RecipesRecyclerFragment extends Fragment implements MainRecipesAdap
             });
 
         }else {
+            ((MainActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.app_name));
             viewModel.getRecipes().observe(getViewLifecycleOwner(), new Observer<List<Recipe>>() {
                 @Override
                 public void onChanged(List<Recipe> recipes) {
@@ -97,11 +98,8 @@ public class RecipesRecyclerFragment extends Fragment implements MainRecipesAdap
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        try {
-            onRecipesChangedListener = (OnRecipesChangedListener) context;
-        } catch(ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement OnRecipesChangedListener ");
-        }
+
+
     }
 
     @Nullable
@@ -115,9 +113,15 @@ public class RecipesRecyclerFragment extends Fragment implements MainRecipesAdap
         adapter = new MainRecipesAdapter(getActivity(),this);
         recyclerView.setAdapter(adapter);
         toast = Toast.makeText(getActivity(),"",Toast.LENGTH_LONG);
+//        if(b != null && b.get(getString(R.string.key_Favourites)).equals(getString(R.string.show_fav_recipes))){
+//            getActivity().getActionBar().setTitle(getString(R.string.show_fav_recipes));
+//        }else {
+//            getActivity().getActionBar().setTitle(getString(R.string.show_main_list));
+//        }
         return view;
 
     }
+
 
 
     @Override

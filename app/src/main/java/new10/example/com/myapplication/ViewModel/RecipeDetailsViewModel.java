@@ -36,8 +36,7 @@ public class RecipeDetailsViewModel extends ViewModel {
 
     public void insertRecipeIntoFav(Recipe recipe,Context context){
         FavRecipeRepository.insertRecipeIntoFav(recipe,context);
-//        FavRecipeRepository.insertStepsOfRecipe(recipe);
-//        FavRecipeRepository.insertIngredientsOfRecipe(recipe);
+
     }
 
     public void removeRecipeFromFav(Recipe recipe){

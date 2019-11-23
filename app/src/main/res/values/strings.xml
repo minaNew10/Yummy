@@ -18,4 +18,6 @@
     <string name="key_ingredients" translatable="false">ingredients</string>
     <string name="tag_ingredient_fragment" translatable="false">ingredient fragment</string>
     <string name="key_title_recipe_name" translatable="false">recipe ingredient</string>
+    <string name="fav_fragment_tag">favourites fragment</string>
+    <string name="show_main_list">Home</string>
 </resources>

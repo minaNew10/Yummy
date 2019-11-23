@@ -53,11 +53,5 @@ public class MainRecipesViewModel extends ViewModel {
         return favIngredient;
     }
 
-//    public LiveData<List<Step>> getFavSteps(Context context){
-//        if(favSteps == null){
-//            favSteps = FavRecipeRepository.getFavSteps(context);
-//        }
-//        return favSteps;
-//    }
 
 }
