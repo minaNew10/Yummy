@@ -59,16 +59,13 @@ public class MainActivity extends AppCompatActivity{
         switch (id){
             case R.id.action_show_favourites:
 
-                if(item.getTitle().equals(getString(R.string.show_fav_recipes))) {
+                if (item.getTitle().equals(getString(R.string.show_fav_recipes))) {
                     isFav = true;
+                    replaceFragment(favFragment, getString(R.string.fav_fragment_tag));
 
-                    replaceFragment(favFragment,getString(R.string.fav_fragment_tag));
-                    item.setTitle(getString(R.string.show_main_list));
-                }else{
+                } else {
                     isFav = false;
-
-                    replaceFragment(mainFragment,getString(R.string.recipes_list_fragment_tag));
-                    item.setTitle(getString(R.string.show_fav_recipes));
+                    replaceFragment(mainFragment, getString(R.string.recipes_list_fragment_tag));
                 }
                 break;
 

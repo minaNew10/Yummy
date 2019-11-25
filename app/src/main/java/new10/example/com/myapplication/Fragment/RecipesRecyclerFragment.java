@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -114,10 +115,11 @@ public class RecipesRecyclerFragment extends Fragment implements MainRecipesAdap
         recyclerView.setAdapter(adapter);
         toast = Toast.makeText(getActivity(),"",Toast.LENGTH_LONG);
 //        if(b != null && b.get(getString(R.string.key_Favourites)).equals(getString(R.string.show_fav_recipes))){
-//            getActivity().getActionBar().setTitle(getString(R.string.show_fav_recipes));
+//            ((MainActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.show_fav_recipes));
 //        }else {
-//            getActivity().getActionBar().setTitle(getString(R.string.show_main_list));
+//            ((MainActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.show_main_list));
 //        }
+        setHasOptionsMenu(true);
         return view;
 
     }
@@ -131,5 +133,22 @@ public class RecipesRecyclerFragment extends Fragment implements MainRecipesAdap
         startActivity(intent);
     }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.action_show_favourites){
+            if (b != null && b.get(getString(R.string.key_Favourites)).equals(getString(R.string.show_fav_recipes))) {
+                item.setTitle(R.string.show_fav_recipes);
+            } else {
+                item.setTitle(R.string.show_main_list);
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
+
