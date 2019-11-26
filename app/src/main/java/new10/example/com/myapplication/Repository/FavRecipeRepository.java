@@ -35,13 +35,13 @@ public class FavRecipeRepository {
         return Recipes;
     }
 
-    public static LiveData<List<Step>> getRecipeSteps(Context context,int recipeId){
+    public static LiveData<List<Step>> getFavRecipeSteps(Context context, int recipeId){
         appDatabase = AppDatabase.getInstance(context);
         LiveData<List<Step>> steps = appDatabase.stepDao().findStepsForRecipe(recipeId);
 
         return steps;
     }
-    public static LiveData<List<Ingredient>> getRecipeIngredients(Context context,int recipeId){
+    public static LiveData<List<Ingredient>> getFavRecipeIngredients(Context context, int recipeId){
         appDatabase = AppDatabase.getInstance(context);
         LiveData<List<Ingredient>> ingredients = appDatabase.ingredientDao().findIngredientsForRecipe(recipeId);
 
