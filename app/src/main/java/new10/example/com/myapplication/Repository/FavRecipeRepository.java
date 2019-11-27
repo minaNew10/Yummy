@@ -113,7 +113,9 @@ public class FavRecipeRepository {
             @Override
             public void run() {
                 //add your del method form your Dao
-                appDatabase.recipeDao().insert(item);
+                appDatabase.recipeDao().delete(item);
+                appDatabase.stepDao().delStepsForRecipe(item.getId());
+                appDatabase.ingredientDao().delIngredientsForRecipe(item.getId());
             }
         });
     }

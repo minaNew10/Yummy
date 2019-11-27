@@ -24,6 +24,9 @@ public interface StepDao {
     @Query("SELECT * FROM step")
     List<Step> getAllSteps();
 
+    @Query("DELETE FROM step WHERE recipe_id =:recipe_id")
+    void  delStepsForRecipe(int recipe_id);
+
     @Query("SELECT * FROM step")
     Cursor getAllStepsInCursor();
 

@@ -30,4 +30,7 @@ public interface IngredientDao {
 
     @Query("SElECT * FROM ingredient WHERE recipe_id =:recipe_id")
     LiveData<List<Ingredient>> findIngredientsForRecipe(int recipe_id);
+
+    @Query("DELETE FROM "+ Ingredient.TABLE_NAME + " WHERE "+ Ingredient.COLUMN_RECIPE_ID +" =:recipe_id")
+    void  delIngredientsForRecipe(int recipe_id);
 }
