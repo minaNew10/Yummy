@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -42,4 +43,11 @@ public class RecipeDetailsViewModel extends ViewModel {
     public void removeRecipeFromFav(Recipe recipe){
         FavRecipeRepository.removeRecipeFromFav(recipe);
     }
+
+    public MutableLiveData<Boolean> isFav(Context context, Recipe recipe){
+        return FavRecipeRepository.isFavRecipe(context,recipe.getId());
+
+    }
+
+
 }

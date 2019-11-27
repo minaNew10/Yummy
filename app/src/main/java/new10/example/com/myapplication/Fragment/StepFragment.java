@@ -51,7 +51,6 @@ public class StepFragment extends Fragment {
     ArrayList<Step> steps;
     int position;
     Step s;
-    String oldTitle;
     private SimpleExoPlayer player;
     private boolean playWhenReady = true;
     private long playbackPosition ;
@@ -61,44 +60,44 @@ public class StepFragment extends Fragment {
     @BindView(R.id.video_view) PlayerView playerView;
     @BindView(R.id.imgv_prev) ImageView imgPrev;
     @BindView(R.id.imgv_next) ImageView imgNext;
+    @BindView(R.id.txtv_short_desc) TextView txtvShortDesc;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_step_detail,container,false);
         ButterKnife.bind(this,v);
         Bundle b = getArguments();
-        position = b.getInt(getString(R.string.key_position));
-
-
-        if(position-1 == 0){
+        position = b.getInt(getString(R.string.key_position)) -1;
+        if(position == 0){
             imgPrev.setClickable(false);
             imgPrev.setAlpha(0.5f);
         }
-
+        populateUi(position);
 
         return v;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+
+    private void populateUi(int pos){
+
         viewModel = ViewModelProviders.of(getActivity()).get(RecipeDetailsViewModel.class);
         MutableLiveData<Recipe> recipe = viewModel.getRecipe();
         recipe.observe(getViewLifecycleOwner(), new Observer<Recipe>() {
             @Override
             public void onChanged(Recipe recipe) {
                 steps = (ArrayList) recipe.getSteps();
-                s = steps.get(position-1);
+                s = steps.get(pos);
                 tvInstruction.setText(s.getDescription());
-                if(position-1 == steps.size()-1){
+                txtvShortDesc.setText(s.getShortDescription());
+                if(pos == steps.size()-1){
                     imgNext.setClickable(false);
                     imgNext.setAlpha(0.5f);
                 }
+
+                initializePlayer();
             }
         });
-
     }
-
     private void initializePlayer() {
         if (player == null){
             player = ExoPlayerFactory.newSimpleInstance(
@@ -137,24 +136,7 @@ public class StepFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(getString(R.string.key_title_recipe_name),oldTitle);
-    }
 
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        if(savedInstanceState != null)
-            oldTitle = savedInstanceState.getString(getString(R.string.key_title_recipe_name));
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        oldTitle = ((RecipeActivity) getActivity()).getSupportActionBar().getTitle().toString();
-    }
 
     @Override
     public void onResume() {
@@ -163,8 +145,6 @@ public class StepFragment extends Fragment {
         if ((Util.SDK_INT <= 23 || player == null)) {
             initializePlayer();
         }
-
-        ((RecipeActivity)getActivity()).setActionBarTitle(oldTitle + " " + "(" + steps.get(position-1).getShortDescription() + ")");
     }
 
     @SuppressLint("InlinedApi")
@@ -205,22 +185,24 @@ public class StepFragment extends Fragment {
 
     @OnClick(R.id.imgv_next)
     public void nextStep(){
-        Fragment currFrag = getFragmentManager().findFragmentByTag(getString(R.string.tag_step_fragment));
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction().addToBackStack(null);
-        fragmentTransaction.detach(currFrag);
-        currFrag.getArguments().putInt(getString(R.string.key_position),position+1);
-        fragmentTransaction.attach(currFrag);
-        fragmentTransaction.commit();
+        imgPrev.setClickable(true);
+        imgPrev.setAlpha(1.0f);
+        if(position + 2 == steps.size()-1){
+            imgNext.setClickable(false);
+            imgNext.setAlpha(0.5f);
+        }
+        populateUi(++position);
     }
 
     @OnClick(R.id.imgv_prev)
     public void prevStep(){
-        Fragment currFrag = getFragmentManager().findFragmentByTag(getString(R.string.tag_step_fragment));
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction().addToBackStack(null);
-        fragmentTransaction.detach(currFrag);
-        currFrag.getArguments().putInt(getString(R.string.key_position),position-1);
-        fragmentTransaction.attach(currFrag);
-        fragmentTransaction.commit();
+        imgNext.setClickable(true);
+        imgNext.setAlpha(1.0f);
+        if(position - 2 == 0){
+            imgPrev.setClickable(false);
+            imgPrev.setAlpha(0.5f);
+        }
+        populateUi(--position);
     }
 
 }
