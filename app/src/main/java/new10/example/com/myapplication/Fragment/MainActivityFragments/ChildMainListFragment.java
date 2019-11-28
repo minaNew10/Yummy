@@ -1,9 +1,8 @@
-package new10.example.com.myapplication.Fragment;
+package new10.example.com.myapplication.Fragment.MainActivityFragments;
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,12 +12,9 @@ import androidx.lifecycle.ViewModelProviders;
 import java.util.List;
 
 import new10.example.com.myapplication.Activity.MainActivity;
-import new10.example.com.myapplication.Model.Ingredient;
 import new10.example.com.myapplication.Model.Recipe;
-import new10.example.com.myapplication.Model.Step;
 import new10.example.com.myapplication.R;
-import new10.example.com.myapplication.ViewModel.FavRecipesFragmentViewModel;
-import new10.example.com.myapplication.ViewModel.MainRecipesFragmentViewModel;
+import new10.example.com.myapplication.ViewModel.MainActivityViewModels.MainRecipesFragmentViewModel;
 
 public class ChildMainListFragment extends ParentFragmentForMainlist {
     private MainRecipesFragmentViewModel viewModel;

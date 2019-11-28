@@ -1,4 +1,4 @@
-package new10.example.com.myapplication.ViewModel;
+package new10.example.com.myapplication.ViewModel.MainActivityViewModels;
 
 import android.content.Context;
 

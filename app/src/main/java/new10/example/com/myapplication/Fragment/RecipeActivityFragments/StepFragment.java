@@ -1,4 +1,4 @@
-package new10.example.com.myapplication.Fragment;
+package new10.example.com.myapplication.Fragment.RecipeActivityFragments;
 
 import android.annotation.SuppressLint;
 
@@ -15,9 +15,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -29,74 +26,77 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import new10.example.com.myapplication.Activity.RecipeActivity;
 
-import new10.example.com.myapplication.Model.Recipe;
 import new10.example.com.myapplication.Model.Step;
 import new10.example.com.myapplication.R;
-import new10.example.com.myapplication.ViewModel.RecipeDetailsViewModel;
+import new10.example.com.myapplication.ViewModel.RecipeActivityViewModels.StepFragmentViewModel;
 
 public class StepFragment extends Fragment {
     private static final String TAG = "StepFragment";
-    ArrayList<Step> steps;
-    int position;
-    Step s;
+    List<Step> stepList;
+    Step currStep;
+    int position = -1;
     private SimpleExoPlayer player;
     private boolean playWhenReady = true;
     private long playbackPosition ;
     private int currentWindow;
-    private RecipeDetailsViewModel viewModel;
-    @BindView(R.id.txtv_instruction) TextView tvInstruction;
-    @BindView(R.id.video_view) PlayerView playerView;
-    @BindView(R.id.imgv_prev) ImageView imgPrev;
-    @BindView(R.id.imgv_next) ImageView imgNext;
-    @BindView(R.id.txtv_short_desc) TextView txtvShortDesc;
+    private StepFragmentViewModel viewModel;
+    Bundle b;
+    @BindView(R.id.txtv_instruction) public TextView tvInstruction;
+    @BindView(R.id.video_view) public PlayerView playerView;
+    @BindView(R.id.imgv_prev) public ImageView imgPrev;
+    @BindView(R.id.imgv_next) public ImageView imgNext;
+    @BindView(R.id.txtv_short_desc) public TextView txtvShortDesc;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_step_detail,container,false);
         ButterKnife.bind(this,v);
-        Bundle b = getArguments();
-        position = b.getInt(getString(R.string.key_position)) -1;
-        if(position == 0){
-            imgPrev.setClickable(false);
-            imgPrev.setAlpha(0.5f);
+        b = getArguments();
+        stepList = b.getParcelableArrayList(getString(R.string.key_steps));
+        viewModel = ViewModelProviders.of(getActivity()).get(StepFragmentViewModel.class);
+        if(savedInstanceState == null) {
+            position = b.getInt(getString(R.string.key_position)) - 1;
+            viewModel.setPos(position);
+            viewModel.setStepList(stepList);
         }
-        populateUi(position);
+        position = viewModel.getPos();
 
+        populateUi();
         return v;
     }
 
 
-    private void populateUi(int pos){
 
-        viewModel = ViewModelProviders.of(getActivity()).get(RecipeDetailsViewModel.class);
-        MutableLiveData<Recipe> recipe = viewModel.getRecipe();
-        recipe.observe(getViewLifecycleOwner(), new Observer<Recipe>() {
-            @Override
-            public void onChanged(Recipe recipe) {
-                steps = (ArrayList) recipe.getSteps();
-                s = steps.get(pos);
-                tvInstruction.setText(s.getDescription());
-                txtvShortDesc.setText(s.getShortDescription());
-                if(pos == steps.size()-1){
-                    imgNext.setClickable(false);
-                    imgNext.setAlpha(0.5f);
-                }
 
-                initializePlayer();
-            }
-        });
+    private void populateUi(){
+        currStep = viewModel.getStep();
+        imgNext.setClickable(true);
+        imgNext.setAlpha(1.0f);
+        imgPrev.setClickable(true);
+        imgPrev.setAlpha(1.0f);
+        if(position == 0){
+            imgPrev.setClickable(false);
+            imgPrev.setAlpha(0.5f);
+        }
+        if(position == stepList.size()-1){
+            imgNext.setClickable(false);
+            imgNext.setAlpha(0.5f);
+        }
+
+        tvInstruction.setText(currStep.getDescription());
+        txtvShortDesc.setText(currStep.getShortDescription());
+
+        initializePlayer();
     }
     private void initializePlayer() {
         if (player == null){
@@ -107,7 +107,7 @@ public class StepFragment extends Fragment {
             player.setPlayWhenReady(playWhenReady);
             player.seekTo(currentWindow, playbackPosition);
         }
-        Uri uri = Uri.parse(s.getVideoURL());
+        Uri uri = Uri.parse(currStep.getVideoURL());
 //        MediaSource mediaSource = buildMediaSource(uri);
 //        player.prepare(mediaSource, true, false);
 
@@ -185,24 +185,16 @@ public class StepFragment extends Fragment {
 
     @OnClick(R.id.imgv_next)
     public void nextStep(){
-        imgPrev.setClickable(true);
-        imgPrev.setAlpha(1.0f);
-        if(position + 2 == steps.size()-1){
-            imgNext.setClickable(false);
-            imgNext.setAlpha(0.5f);
-        }
-        populateUi(++position);
+
+        viewModel.setPos(++position);
+        populateUi();
     }
 
     @OnClick(R.id.imgv_prev)
     public void prevStep(){
-        imgNext.setClickable(true);
-        imgNext.setAlpha(1.0f);
-        if(position - 2 == 0){
-            imgPrev.setClickable(false);
-            imgPrev.setAlpha(0.5f);
-        }
-        populateUi(--position);
+
+        viewModel.setPos(--position);
+        populateUi();
     }
 
 }

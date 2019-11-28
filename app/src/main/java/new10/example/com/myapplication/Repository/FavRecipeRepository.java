@@ -26,6 +26,7 @@ public class FavRecipeRepository {
 
     private static AppDatabase appDatabase;
     private static Recipe currRecipe;
+    private static boolean isFav;
 
     public static LiveData<List<Recipe>> getFavRecipes(Context context) {
         appDatabase = AppDatabase.getInstance(context);
@@ -48,9 +49,9 @@ public class FavRecipeRepository {
         return ingredients;
     }
 
-    public static MutableLiveData<Boolean> isFavRecipe(Context context, int itemId) {
+    public static boolean isFavRecipe(Context context, int itemId) {
         appDatabase = AppDatabase.getInstance(context);
-        MutableLiveData<Boolean> isFav = new MutableLiveData<>();
+
 
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
@@ -59,9 +60,9 @@ public class FavRecipeRepository {
                 currRecipe = appDatabase.recipeDao().loadRecipeById(itemId);
 
                 if (currRecipe == null) {
-                    isFav.postValue(false);
+                    isFav = false;
                 } else {
-                    isFav.postValue(true);
+                    isFav = true;
                 }
             }
         });

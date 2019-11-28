@@ -1,9 +1,9 @@
-package new10.example.com.myapplication.ViewModel;
+package new10.example.com.myapplication.ViewModel.MainActivityViewModels;
 
 import androidx.lifecycle.ViewModel;
 
-import new10.example.com.myapplication.Fragment.ChildFavListFragment;
-import new10.example.com.myapplication.Fragment.ChildMainListFragment;
+import new10.example.com.myapplication.Fragment.MainActivityFragments.ChildFavListFragment;
+import new10.example.com.myapplication.Fragment.MainActivityFragments.ChildMainListFragment;
 
 public class MainActivityViewModel extends ViewModel {
     private ChildMainListFragment mainListFragment;

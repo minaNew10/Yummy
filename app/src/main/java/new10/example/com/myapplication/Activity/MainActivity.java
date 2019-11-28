@@ -9,11 +9,11 @@ import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import new10.example.com.myapplication.Fragment.ChildFavListFragment;
-import new10.example.com.myapplication.Fragment.ChildMainListFragment;
+import new10.example.com.myapplication.Fragment.MainActivityFragments.ChildFavListFragment;
+import new10.example.com.myapplication.Fragment.MainActivityFragments.ChildMainListFragment;
 
 import new10.example.com.myapplication.R;
-import new10.example.com.myapplication.ViewModel.MainActivityViewModel;
+import new10.example.com.myapplication.ViewModel.MainActivityViewModels.MainActivityViewModel;
 
 public class MainActivity extends AppCompatActivity{
     ChildMainListFragment mainFragment;

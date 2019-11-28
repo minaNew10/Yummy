@@ -1,4 +1,4 @@
-package new10.example.com.myapplication.Fragment;
+package new10.example.com.myapplication.Fragment.MainActivityFragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,11 +24,11 @@ import new10.example.com.myapplication.Activity.RecipeActivity;
 import new10.example.com.myapplication.Adapter.MainRecipesAdapter;
 import new10.example.com.myapplication.Model.Recipe;
 import new10.example.com.myapplication.R;
-import new10.example.com.myapplication.ViewModel.MainRecipesFragmentViewModel;
+import new10.example.com.myapplication.ViewModel.MainActivityViewModels.MainRecipesFragmentViewModel;
 
 public class ParentFragmentForMainlist extends Fragment implements MainRecipesAdapter.MainRecipesListener {
     @BindView(R.id.recycler_recipes_main)
-    RecyclerView recyclerView;
+    public RecyclerView recyclerView;
     List<Recipe> recipesList = new ArrayList<>();
     MainRecipesAdapter adapter;
     private MainRecipesFragmentViewModel viewModel;
@@ -43,11 +43,6 @@ public class ParentFragmentForMainlist extends Fragment implements MainRecipesAd
         adapter = new MainRecipesAdapter(getActivity(),this);
         recyclerView.setAdapter(adapter);
         toast = Toast.makeText(getActivity(),"",Toast.LENGTH_LONG);
-//        if(b != null && b.get(getString(R.string.key_Favourites)).equals(getString(R.string.show_fav_recipes))){
-//            ((MainActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.show_fav_recipes));
-//        }else {
-//            ((MainActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.show_main_list));
-//        }
         setHasOptionsMenu(true);
         return view;
     }

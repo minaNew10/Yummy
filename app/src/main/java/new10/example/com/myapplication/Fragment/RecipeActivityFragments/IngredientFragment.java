@@ -1,60 +1,53 @@
-package new10.example.com.myapplication.Fragment;
+package new10.example.com.myapplication.Fragment.RecipeActivityFragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.ArrayList;
-
+import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import new10.example.com.myapplication.Adapter.IngredientAdapter;
-import new10.example.com.myapplication.Adapter.RecipeDetailsAdapter;
 import new10.example.com.myapplication.Model.Ingredient;
-import new10.example.com.myapplication.Model.Recipe;
 import new10.example.com.myapplication.R;
-import new10.example.com.myapplication.ViewModel.RecipeDetailsViewModel;
+import new10.example.com.myapplication.ViewModel.RecipeActivityViewModels.IngredientsFragmentViewModel;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class IngredientFragment extends Fragment {
     @BindView(R.id.recycler_ingredients)
-    RecyclerView recyclerView;
-    private RecipeDetailsViewModel viewModel;
+    public RecyclerView recyclerView;
+    private IngredientsFragmentViewModel viewModel;
     IngredientAdapter ingredientAdapter;
-    ArrayList<Ingredient> ingredients;
+    List<Ingredient> currIngredients;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_ingredients,container,false);
         ButterKnife.bind(this,v);
+        Bundle b = getArguments();
+        currIngredients = b.getParcelableArrayList(getString(R.string.key_ingredients));
+        setupViewModel(currIngredients);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getActivity(),RecyclerView.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
         ingredientAdapter = new IngredientAdapter(getActivity());
+        ingredientAdapter.setItems(currIngredients);
         recyclerView.setAdapter(ingredientAdapter);
-
         return v;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        viewModel = ViewModelProviders.of(getActivity()).get(RecipeDetailsViewModel.class);
-        MutableLiveData<Recipe> recipe = viewModel.getRecipe();
-        recipe.observe(getViewLifecycleOwner(), new Observer<Recipe>() {
-            @Override
-            public void onChanged(Recipe recipe) {
-                ingredients = (ArrayList) recipe.getIngredients();
-                ingredientAdapter.setItems(ingredients);
-            }
-        });
+    private void setupViewModel(List<Ingredient> ingredients) {
+        viewModel = ViewModelProviders.of(getActivity()).get(IngredientsFragmentViewModel.class);
+        viewModel.setRecipeIngredients(ingredients);
+        currIngredients = viewModel.getRecipeIngredients();
     }
+
+
 }
