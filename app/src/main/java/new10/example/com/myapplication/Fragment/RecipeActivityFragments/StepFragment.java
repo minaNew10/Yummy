@@ -1,17 +1,13 @@
 package new10.example.com.myapplication.Fragment.RecipeActivityFragments;
 
 import android.annotation.SuppressLint;
-
 import android.net.Uri;
 import android.os.Bundle;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -29,13 +25,10 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 import new10.example.com.myapplication.Model.Step;
 import new10.example.com.myapplication.R;
 import new10.example.com.myapplication.ViewModel.RecipeActivityViewModels.StepFragmentViewModel;

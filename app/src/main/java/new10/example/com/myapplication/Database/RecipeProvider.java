@@ -127,15 +127,21 @@ public class RecipeProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
-        final int match = MATCHER.match(uri);
+
+       final int match = MATCHER.match(uri);
         final Context context = getContext();
         if (context == null) {
             return 0;
         }
         switch (match){
             case RECIPE:
+                int id = (int) ContentUris.parseId(uri);
                 final int count = AppDatabase.getInstance(context).recipeDao()
-                        .deleteById(ContentUris.parseId(uri));
+                        .deleteById(id);
+                final int stepsCount = AppDatabase.getInstance(context).stepDao()
+                        .delStepsForRecipe(id);
+                final int ingredCount = AppDatabase.getInstance(context).ingredientDao()
+                        .delIngredientsForRecipe(id);
                 context.getContentResolver().notifyChange(uri, null);
                 return count;
             default:

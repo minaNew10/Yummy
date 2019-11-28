@@ -24,7 +24,7 @@ public interface RecipeDao {
     void delete(Recipe... recipes);
 
     @Query("DELETE FROM " + Recipe.TABLE_NAME + " WHERE "+ Recipe.COLUMN_ID  + " = :id")
-    int deleteById(long id);
+    int deleteById(int id);
 
     @Query("SELECT * FROM recipe")
     LiveData<List<Recipe>> getAllRecipes();

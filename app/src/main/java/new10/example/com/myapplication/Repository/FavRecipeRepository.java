@@ -71,12 +71,11 @@ public class FavRecipeRepository {
     }
 
     public static void insertRecipeIntoFav(Recipe item,Context context) {
-        appDatabase = AppDatabase.getInstance(context);
         List<Step> steps = item.getSteps();
         List<Ingredient> ingredients = item.getIngredients();
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
-            public void run() {// your insert method from your Dao
+            public void run() {
                 ContentValues recipeValues = new ContentValues();
                 recipeValues.put(Recipe.COLUMN_NAME,item.getName());
                 recipeValues.put(Recipe.COLUMN_SERVINGS,item.getServings());
@@ -105,18 +104,16 @@ public class FavRecipeRepository {
                 }
             }
         });
-
     }
 
 
-    public static void removeRecipeFromFav(Recipe item) {
+    public static void removeRecipeFromFav(Recipe item,Context context) {
+        Uri recipeUri = ContentUris.withAppendedId(RecipeProvider.URI_RECIPE,item.getId());
+
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                //add your del method form your Dao
-                appDatabase.recipeDao().delete(item);
-                appDatabase.stepDao().delStepsForRecipe(item.getId());
-                appDatabase.ingredientDao().delIngredientsForRecipe(item.getId());
+                context.getContentResolver().delete(recipeUri,null,null);
             }
         });
     }

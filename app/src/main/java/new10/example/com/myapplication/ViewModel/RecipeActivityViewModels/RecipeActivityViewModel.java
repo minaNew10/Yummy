@@ -38,8 +38,8 @@ public class RecipeActivityViewModel extends ViewModel {
 
     }
 
-    public void removeRecipeFromFav(Recipe recipe){
-        FavRecipeRepository.removeRecipeFromFav(recipe);
+    public void removeRecipeFromFav(Recipe recipe,Context context){
+        FavRecipeRepository.removeRecipeFromFav(recipe,context);
     }
 
     public boolean isFav(Context context, Recipe recipe){

@@ -97,7 +97,7 @@ public class RecipeActivity extends AppCompatActivity {
     }
 
     private void delRecipe() {
-        viewModel.removeRecipeFromFav(recipe);
+        viewModel.removeRecipeFromFav(recipe,this);
     }
 
     private void saveRecipe() {
