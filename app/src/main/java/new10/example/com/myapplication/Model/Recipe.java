@@ -30,7 +30,7 @@ public static final String CONTENT_ITEM_TYPE =
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_SERVINGS = "servings";
     public static final String COLUMN_IMAGE = "image";
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private int id;
     private String name;
     private int servings;
@@ -141,6 +141,9 @@ public static final String CONTENT_ITEM_TYPE =
      */
      public static Recipe fromContentValues(ContentValues values){
          final Recipe recipe = new Recipe();
+         if (values.containsKey(COLUMN_ID)){
+             recipe.id = values.getAsInteger(COLUMN_ID);
+         }
          if(values.containsKey(COLUMN_NAME)){
              recipe.name = values.getAsString(COLUMN_NAME);
          }

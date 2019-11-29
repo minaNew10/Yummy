@@ -1,10 +1,14 @@
 package new10.example.com.myapplication.ViewModel.RecipeActivityViewModels;
 
+import android.content.Context;
+
 import androidx.lifecycle.ViewModel;
 
 import java.util.List;
 
+import new10.example.com.myapplication.Model.Recipe;
 import new10.example.com.myapplication.Model.Step;
+import new10.example.com.myapplication.Repository.FavRecipeRepository;
 
 public class StepFragmentViewModel extends ViewModel {
     private List<Step> stepList;
@@ -28,5 +32,6 @@ public class StepFragmentViewModel extends ViewModel {
 
         return stepList.get(pos);
     }
+
 
 }

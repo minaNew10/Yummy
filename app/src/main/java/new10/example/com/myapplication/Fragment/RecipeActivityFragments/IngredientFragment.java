@@ -3,6 +3,9 @@ package new10.example.com.myapplication.Fragment.RecipeActivityFragments;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
@@ -40,6 +43,7 @@ public class IngredientFragment extends Fragment {
         ingredientAdapter = new IngredientAdapter(getActivity());
         ingredientAdapter.setItems(currIngredients);
         recyclerView.setAdapter(ingredientAdapter);
+        setHasOptionsMenu(false);
         return v;
     }
 

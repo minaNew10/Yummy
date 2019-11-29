@@ -4,6 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -34,6 +37,7 @@ public class RecipeFragment extends Fragment implements RecipeDetailsAdapter.Rec
     @BindView(R.id.recycler_recipe_detail)
     public RecyclerView recyclerView;
     Recipe currRecipe;
+
     RecipeDetailsAdapter adapter;
     IngredientFragment ingredientFragment;
     StepFragment stepFragment;

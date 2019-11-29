@@ -20,15 +20,17 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-import static androidx.constraintlayout.widget.Constraints.TAG;
+
 
 public class FavRecipeRepository {
 
     private static AppDatabase appDatabase;
     private static Recipe currRecipe;
     private static boolean isFav;
+    private static final String TAG = "bug";
 
     public static LiveData<List<Recipe>> getFavRecipes(Context context) {
+
         appDatabase = AppDatabase.getInstance(context);
         // add your method for querig all the list
         LiveData<List<Recipe>> Recipes = appDatabase.recipeDao().getAllRecipes();
@@ -49,25 +51,26 @@ public class FavRecipeRepository {
         return ingredients;
     }
 
-    public static boolean isFavRecipe(Context context, int itemId) {
+    public static MutableLiveData<Boolean> isFavRecipe(Context context, int itemId) {
         appDatabase = AppDatabase.getInstance(context);
 
-
+        MutableLiveData<Boolean> isFavLive = new MutableLiveData<>();
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
                 //add your method of quering by id from your Dao
                 currRecipe = appDatabase.recipeDao().loadRecipeById(itemId);
+                Log.i(TAG, "bug  id of searched recipe = " + itemId);
+                Log.i(TAG, "bug curr recipe in repo " + currRecipe);
 
                 if (currRecipe == null) {
-                    isFav = false;
+                    isFavLive.postValue(false);
                 } else {
-                    isFav = true;
+                    isFavLive.postValue(true);
                 }
             }
         });
-
-        return isFav;
+        return isFavLive;
     }
 
     public static void insertRecipeIntoFav(Recipe item,Context context) {
@@ -77,11 +80,13 @@ public class FavRecipeRepository {
             @Override
             public void run() {
                 ContentValues recipeValues = new ContentValues();
+                recipeValues.put(Recipe.COLUMN_ID,item.getId());
                 recipeValues.put(Recipe.COLUMN_NAME,item.getName());
                 recipeValues.put(Recipe.COLUMN_SERVINGS,item.getServings());
                 recipeValues.put(Recipe.COLUMN_IMAGE,item.getImage());
                 Uri uri = context.getContentResolver().insert(RecipeProvider.URI_RECIPE,recipeValues);
                 long id = ContentUris.parseId(uri);
+                Log.i(TAG, "bug id  in insert = " + id);
 
                 for(int i = 0; i < steps.size();++i){
                     Step step = steps.get(i);

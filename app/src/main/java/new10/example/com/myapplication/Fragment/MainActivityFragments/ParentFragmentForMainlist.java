@@ -2,6 +2,7 @@ package new10.example.com.myapplication.Fragment.MainActivityFragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,7 +27,10 @@ import new10.example.com.myapplication.Model.Recipe;
 import new10.example.com.myapplication.R;
 import new10.example.com.myapplication.ViewModel.MainActivityViewModels.MainRecipesFragmentViewModel;
 
+
+
 public class ParentFragmentForMainlist extends Fragment implements MainRecipesAdapter.MainRecipesListener {
+    private static final String TAG = "id bug";
     @BindView(R.id.recycler_recipes_main)
     public RecyclerView recyclerView;
     List<Recipe> recipesList = new ArrayList<>();
@@ -57,6 +61,7 @@ public class ParentFragmentForMainlist extends Fragment implements MainRecipesAd
     public void onClick(Recipe currRecipe) {
         Intent intent = new Intent(getActivity(), RecipeActivity.class);
         intent.putExtra(getString(R.string.recipe_tag),currRecipe);
+
         startActivity(intent);
     }
 }

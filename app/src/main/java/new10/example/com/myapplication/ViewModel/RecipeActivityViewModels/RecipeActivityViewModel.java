@@ -42,7 +42,7 @@ public class RecipeActivityViewModel extends ViewModel {
         FavRecipeRepository.removeRecipeFromFav(recipe,context);
     }
 
-    public boolean isFav(Context context, Recipe recipe){
+    public MutableLiveData<Boolean> isFav(Context context, Recipe recipe){
         return FavRecipeRepository.isFavRecipe(context,recipe.getId());
 
     }

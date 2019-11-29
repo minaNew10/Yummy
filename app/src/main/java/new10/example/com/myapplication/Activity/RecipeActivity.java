@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -21,7 +22,7 @@ import new10.example.com.myapplication.ViewModel.RecipeActivityViewModels.Recipe
 import new10.example.com.myapplication.ViewModel.RecipeActivityViewModels.RecipeDetailsFragmentViewModel;
 
 public class RecipeActivity extends AppCompatActivity {
-
+    private static final String TAG = "bug";
     private RecipeActivityViewModel viewModel;
     RecipeFragment recipeFragment;
 
@@ -52,7 +53,15 @@ public class RecipeActivity extends AppCompatActivity {
         viewModel = ViewModelProviders.of(this).get(RecipeActivityViewModel.class);
         recipeFragment = viewModel.getRecipeFragment();
         recipeFragment.setArguments(bundle);
-        isFav = viewModel.isFav(this,recipe);
+        MutableLiveData<Boolean> isFavLive = viewModel.isFav(this,recipe);
+        isFavLive.observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                isFav = aBoolean;
+            }
+        });
+
+        Log.i(TAG, "setupViewModel: " + isFav);
     }
 
 
@@ -65,6 +74,7 @@ public class RecipeActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_recipe,menu);
         MenuItem item =  menu.getItem(0);
+        Log.i(TAG, "bug : isFav in recipe Activity " + isFav);
         if(isFav){
             item.setIcon(R.drawable.star_fav);
         }else {
