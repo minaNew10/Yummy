@@ -21,7 +21,7 @@ public class Ingredient implements Parcelable {
     public static final String TABLE_NAME = "ingredient";
     public static final String CONTENT_LIST_TYPE =
             ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + RecipeProvider.AUTHORITY + "/" + TABLE_NAME;
-
+    public static final String COLUMN_ID= "id";
     public static final String COLUMN_QUANTITY = "quantity";
     public static final String COLUMN_MEASURE = "measure";
     public static final String COLUMN_NAME = "ingredient";

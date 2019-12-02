@@ -1,6 +1,7 @@
 package new10.example.com.myapplication.ViewModel.MainActivityViewModels;
 
 import android.content.Context;
+import android.database.Cursor;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
@@ -14,28 +15,24 @@ import new10.example.com.myapplication.Repository.FavRecipeRepository;
 
 public class FavRecipesFragmentViewModel extends ViewModel {
 
-    private LiveData<List<Recipe>> favRecipes;
-    private LiveData<List<Step>> favSteps;
-    private LiveData<List<Ingredient>> favIngredient;
+    private LiveData<Cursor> favRecipes;
+    private LiveData<Cursor> favSteps;
+    private LiveData<Cursor> favIngredient;
 
-    public LiveData<List<Recipe>> getFavRecipes(Context context){
+    public LiveData<Cursor> getFavRecipes(Context context){
         if(favRecipes == null){
             favRecipes = FavRecipeRepository.getFavRecipes(context);
         }
         return favRecipes;
     }
 
-    public LiveData<List<Step>> getFavRecipeSteps(Context context, int recipeId){
-        if(favSteps == null){
+    public LiveData<Cursor> getFavRecipeSteps(Context context, int recipeId){
             favSteps = FavRecipeRepository.getFavRecipeSteps(context,recipeId);
-        }
         return favSteps;
     }
 
-    public LiveData<List<Ingredient>> getFavRecipeIngredients(Context context,int recipeId){
-        if(favIngredient == null){
+    public LiveData<Cursor> getFavRecipeIngredients(Context context,int recipeId){
             favIngredient = FavRecipeRepository.getFavRecipeIngredients(context,recipeId);
-        }
         return favIngredient;
     }
 }

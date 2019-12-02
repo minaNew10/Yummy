@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import androidx.lifecycle.MutableLiveData;
 
+import new10.example.com.myapplication.Activity.RecipeActivity;
 import new10.example.com.myapplication.Database.AppDatabase;
 import new10.example.com.myapplication.Database.RecipeProvider;
 import new10.example.com.myapplication.Model.Ingredient;
@@ -29,26 +30,48 @@ public class FavRecipeRepository {
     private static boolean isFav;
     private static final String TAG = "bug";
 
-    public static LiveData<List<Recipe>> getFavRecipes(Context context) {
+    public static LiveData<Cursor> getFavRecipes(Context context) {
+        MutableLiveData<Cursor> recipesInCursor = new MutableLiveData<>();
+        final String[] projection = {
+                Recipe.COLUMN_ID,
+                Recipe.COLUMN_NAME,
+                Recipe.COLUMN_IMAGE,
+                Recipe.COLUMN_SERVINGS,
+        };
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                Cursor cursor = context.getContentResolver().query(RecipeProvider.URI_RECIPE,projection,null,null,null);
+                recipesInCursor.postValue(cursor);
+            }
+        });
 
-        appDatabase = AppDatabase.getInstance(context);
-        // add your method for querig all the list
-        LiveData<List<Recipe>> Recipes = appDatabase.recipeDao().getAllRecipes();
-
-        return Recipes;
+        return recipesInCursor;
     }
 
-    public static LiveData<List<Step>> getFavRecipeSteps(Context context, int recipeId){
-        appDatabase = AppDatabase.getInstance(context);
-        LiveData<List<Step>> steps = appDatabase.stepDao().findStepsForRecipe(recipeId);
+    public static LiveData<Cursor> getFavRecipeSteps(Context context, int recipeId){
+        MutableLiveData<Cursor> stepsInCursor = new MutableLiveData<>();
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                Cursor cursor  = context.getContentResolver().query(RecipeProvider.URI_STEP,null,null,null,null);
+                stepsInCursor.postValue(cursor);
+            }
+        });
 
-        return steps;
+        return stepsInCursor;
     }
-    public static LiveData<List<Ingredient>> getFavRecipeIngredients(Context context, int recipeId){
-        appDatabase = AppDatabase.getInstance(context);
-        LiveData<List<Ingredient>> ingredients = appDatabase.ingredientDao().findIngredientsForRecipe(recipeId);
+    public static LiveData<Cursor> getFavRecipeIngredients(Context context, int recipeId){
+        MutableLiveData<Cursor> ingredientInCursor = new MutableLiveData<>();
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                Cursor cursor  = context.getContentResolver().query(RecipeProvider.URI_INGREDIENT,null,null,null,null);
+                ingredientInCursor.postValue(cursor);
+            }
+        });
 
-        return ingredients;
+        return ingredientInCursor;
     }
 
     public static MutableLiveData<Boolean> isFavRecipe(Context context, int itemId) {
@@ -60,9 +83,6 @@ public class FavRecipeRepository {
             public void run() {
                 //add your method of quering by id from your Dao
                 currRecipe = appDatabase.recipeDao().loadRecipeById(itemId);
-                Log.i(TAG, "bug  id of searched recipe = " + itemId);
-                Log.i(TAG, "bug curr recipe in repo " + currRecipe);
-
                 if (currRecipe == null) {
                     isFavLive.postValue(false);
                 } else {

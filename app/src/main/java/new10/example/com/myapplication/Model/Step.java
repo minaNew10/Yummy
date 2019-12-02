@@ -23,6 +23,7 @@ public class Step implements Parcelable {
     public static final String COLUMN_VIDEO_URL ="videoURL";
     public static final String COLUMN_THUMBNAIL_URL = "thumbnailURL";
     public static final String COLUMN_RECIPE_ID  = "recipe_id";
+    public static final String COLUMN_ID  = "id";
     public static final String CONTENT_LIST_TYPE =
             ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + RecipeProvider.AUTHORITY + "/" + TABLE_NAME;
 

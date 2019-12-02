@@ -30,7 +30,7 @@ import new10.example.com.myapplication.ViewModel.MainActivityViewModels.MainReci
 
 
 public class ParentFragmentForMainlist extends Fragment implements MainRecipesAdapter.MainRecipesListener {
-    private static final String TAG = "id bug";
+    private static final String TAG = "list bug";
     @BindView(R.id.recycler_recipes_main)
     public RecyclerView recyclerView;
     List<Recipe> recipesList = new ArrayList<>();
@@ -61,7 +61,7 @@ public class ParentFragmentForMainlist extends Fragment implements MainRecipesAd
     public void onClick(Recipe currRecipe) {
         Intent intent = new Intent(getActivity(), RecipeActivity.class);
         intent.putExtra(getString(R.string.recipe_tag),currRecipe);
-
+        Log.i(TAG, "onClick: " + currRecipe.getSteps().size());
         startActivity(intent);
     }
 }
