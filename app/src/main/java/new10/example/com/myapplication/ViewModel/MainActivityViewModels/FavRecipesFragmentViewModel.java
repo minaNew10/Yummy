@@ -2,6 +2,7 @@ package new10.example.com.myapplication.ViewModel.MainActivityViewModels;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
@@ -27,13 +28,13 @@ public class FavRecipesFragmentViewModel extends ViewModel {
         }
         return favRecipes;
     }
-//
-//    public MyLiveData<Cursor> getMyLiveDataFavRecipes(Context context){
-//        if(myLiveData == null){
-//            myLiveData = FavRecipeRepository.getMyLiveData(context);
-//        }
-//        return myLiveData;
-//    }
+
+    public MyLiveData<Cursor> getMyLiveDataFavRecipes(Context context){
+        if(myLiveData == null){
+            myLiveData = FavRecipeRepository.getMyLiveData(context);
+        }
+        return myLiveData;
+    }
     public LiveData<Cursor> getFavRecipeSteps(Context context, int recipeId){
             favSteps = FavRecipeRepository.getFavRecipeSteps(context,recipeId);
         return favSteps;

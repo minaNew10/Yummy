@@ -29,8 +29,8 @@ public class FavRecipeRepository {
     private static AppDatabase appDatabase;
     private static Recipe currRecipe;
     private static boolean isFav;
-    private static final String TAG = "bug";
-
+    private static final String TAG = "FavRecipeRepository";
+    static Cursor cursor;
     public static LiveData<Cursor> getFavRecipes(Context context) {
         MutableLiveData<Cursor> recipesInCursor = new MutableLiveData<>();
         final String[] projection = {
@@ -50,23 +50,30 @@ public class FavRecipeRepository {
 
         return recipesInCursor;
     }
-//    public static MyLiveData<Cursor> getMyLiveData(Context context){
-//        final String[] projection = {
-//                Recipe.COLUMN_ID,
-//                Recipe.COLUMN_NAME,
-//                Recipe.COLUMN_IMAGE,
-//                Recipe.COLUMN_SERVINGS,
-//        };
-//        MyLiveData<Cursor> myLiveData = new MyLiveData<Cursor>(RecipeProvider.URI_RECIPE,context) {
-//            @Override
-//            public Cursor getContentProviderValue() {
-//                Cursor cursor = context.getContentResolver().query(RecipeProvider.URI_RECIPE,projection,null,null,null);
-//                postValue(cursor);
-//                return cursor;
-//            }
-//        };
-//        return myLiveData;
-//    }
+    public static MyLiveData<Cursor> getMyLiveData(Context context){
+        final String[] projection = {
+                Recipe.COLUMN_ID,
+                Recipe.COLUMN_NAME,
+                Recipe.COLUMN_IMAGE,
+                Recipe.COLUMN_SERVINGS,
+        };
+        
+        MyLiveData<Cursor> myLiveData = new MyLiveData<Cursor>(RecipeProvider.URI_RECIPE,context) {
+            @Override
+            public Cursor getContentProviderValue() {
+
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        cursor = context.getContentResolver().query(RecipeProvider.URI_RECIPE,projection,null,null,null);
+                        postValue(cursor);
+                    }
+                });
+                return cursor;
+            }
+        };
+        return myLiveData;
+    }
 
     public static LiveData<Cursor> getFavRecipeSteps(Context context, int recipeId){
         MutableLiveData<Cursor> stepsInCursor = new MutableLiveData<>();
@@ -80,6 +87,7 @@ public class FavRecipeRepository {
 
         return stepsInCursor;
     }
+
     public static LiveData<Cursor> getFavRecipeIngredients(Context context, int recipeId){
         MutableLiveData<Cursor> ingredientInCursor = new MutableLiveData<>();
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
@@ -148,7 +156,6 @@ public class FavRecipeRepository {
             }
         });
     }
-
 
     public static void removeRecipeFromFav(Recipe item,Context context) {
         Uri recipeUri = ContentUris.withAppendedId(RecipeProvider.URI_RECIPE,item.getId());
