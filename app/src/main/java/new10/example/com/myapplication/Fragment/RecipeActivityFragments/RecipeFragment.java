@@ -44,12 +44,6 @@ public class RecipeFragment extends Fragment implements RecipeDetailsAdapter.Rec
     Bundle b;
     private RecipeDetailsFragmentViewModel viewModel;
 
-//    OnStepClickListener onStepClickListener;
-//
-//    public interface OnStepClickListener{
-//        void onStepSelected(Recipe recipe,int position);
-//    }
-
     public RecipeFragment() {
     }
 
@@ -82,7 +76,6 @@ public class RecipeFragment extends Fragment implements RecipeDetailsAdapter.Rec
 
     @Override
     public void onClick(Recipe recipe,int position) {
-//
         if(position == 0){
             FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null);
             Bundle ingredientsBundle = new Bundle();

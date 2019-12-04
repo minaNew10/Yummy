@@ -12,6 +12,7 @@ import new10.example.com.myapplication.Model.Ingredient;
 import new10.example.com.myapplication.Model.Recipe;
 import new10.example.com.myapplication.Model.Step;
 import new10.example.com.myapplication.Utils.AppExecutors;
+import new10.example.com.myapplication.Utils.MyLiveData;
 
 import android.database.Cursor;
 import android.net.Uri;
@@ -42,12 +43,30 @@ public class FavRecipeRepository {
             @Override
             public void run() {
                 Cursor cursor = context.getContentResolver().query(RecipeProvider.URI_RECIPE,projection,null,null,null);
+                Log.i(TAG, "run: ");cursor.getCount();
                 recipesInCursor.postValue(cursor);
             }
         });
 
         return recipesInCursor;
     }
+//    public static MyLiveData<Cursor> getMyLiveData(Context context){
+//        final String[] projection = {
+//                Recipe.COLUMN_ID,
+//                Recipe.COLUMN_NAME,
+//                Recipe.COLUMN_IMAGE,
+//                Recipe.COLUMN_SERVINGS,
+//        };
+//        MyLiveData<Cursor> myLiveData = new MyLiveData<Cursor>(RecipeProvider.URI_RECIPE,context) {
+//            @Override
+//            public Cursor getContentProviderValue() {
+//                Cursor cursor = context.getContentResolver().query(RecipeProvider.URI_RECIPE,projection,null,null,null);
+//                postValue(cursor);
+//                return cursor;
+//            }
+//        };
+//        return myLiveData;
+//    }
 
     public static LiveData<Cursor> getFavRecipeSteps(Context context, int recipeId){
         MutableLiveData<Cursor> stepsInCursor = new MutableLiveData<>();
@@ -106,7 +125,6 @@ public class FavRecipeRepository {
                 recipeValues.put(Recipe.COLUMN_IMAGE,item.getImage());
                 Uri uri = context.getContentResolver().insert(RecipeProvider.URI_RECIPE,recipeValues);
                 long id = ContentUris.parseId(uri);
-                Log.i(TAG, "bug id  in insert = " + id);
 
                 for(int i = 0; i < steps.size();++i){
                     Step step = steps.get(i);

@@ -23,7 +23,6 @@ public class MainRecipesAdapter extends RecyclerView.Adapter<MainRecipesAdapter.
     List<Recipe> recipes = new ArrayList<>();
     MainRecipesListener mainRecipesListener;
     Context context;
-    private static final String TAG = "MainRecipesAdapter";
     public interface MainRecipesListener{
         void onClick(Recipe currRecipe);
     }
@@ -55,7 +54,7 @@ public class MainRecipesAdapter extends RecyclerView.Adapter<MainRecipesAdapter.
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
         Recipe recipe = recipes.get(position);
         holder.textView.setText(recipe.getName());
-        Log.i(TAG, "onBindViewHolder: " + recipe.getName());
+
         if(recipe.getName().equalsIgnoreCase(context.getString(R.string.yellow_cake))){
             holder.imageView.setImageResource(R.drawable.yellow_cake);
         }else if(recipe.getName().equalsIgnoreCase(context.getString(R.string.brownies))){

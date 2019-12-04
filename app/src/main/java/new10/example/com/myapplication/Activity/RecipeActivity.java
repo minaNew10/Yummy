@@ -2,30 +2,23 @@ package new10.example.com.myapplication.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import new10.example.com.myapplication.Fragment.RecipeActivityFragments.IngredientFragment;
+import android.widget.Toast;
 import new10.example.com.myapplication.Fragment.RecipeActivityFragments.RecipeFragment;
-import new10.example.com.myapplication.Fragment.RecipeActivityFragments.StepFragment;
-
 import new10.example.com.myapplication.Model.Recipe;
 import new10.example.com.myapplication.R;
 import new10.example.com.myapplication.ViewModel.RecipeActivityViewModels.RecipeActivityViewModel;
-import new10.example.com.myapplication.ViewModel.RecipeActivityViewModels.RecipeDetailsFragmentViewModel;
 
 public class RecipeActivity extends AppCompatActivity {
     private static final String TAG = "bug";
     private RecipeActivityViewModel viewModel;
     RecipeFragment recipeFragment;
-
+    Toast toast;
     Recipe recipe;
     boolean isFav;
     Bundle bundle;
@@ -36,7 +29,7 @@ public class RecipeActivity extends AppCompatActivity {
         bundle = getIntent().getExtras();
 
         recipe = bundle.getParcelable(getString(R.string.recipe_tag));
-
+        toast = Toast.makeText(this,"",Toast.LENGTH_SHORT);
         setActionBarTitle(recipe.getName());
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -60,8 +53,6 @@ public class RecipeActivity extends AppCompatActivity {
                 isFav = aBoolean;
             }
         });
-
-        Log.i(TAG, "setupViewModel: " + isFav);
     }
 
 
@@ -74,7 +65,6 @@ public class RecipeActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_recipe,menu);
         MenuItem item =  menu.getItem(0);
-        Log.i(TAG, "bug : isFav in recipe Activity " + isFav);
         if(isFav){
             item.setIcon(R.drawable.star_fav);
         }else {
@@ -97,11 +87,9 @@ public class RecipeActivity extends AppCompatActivity {
     private void handleActionFav(MenuItem item) {
         if(!isFav) {
             saveRecipe();
-            isFav = true;
             item.setIcon(R.drawable.star_fav);
         }else {
             delRecipe();
-            isFav = false;
             item.setIcon(R.drawable.star);
         }
     }
