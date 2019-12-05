@@ -23,9 +23,9 @@ public class FavRecipesFragmentViewModel extends ViewModel {
     private MyLiveData<Cursor> myLiveData;
 
     public LiveData<Cursor> getFavRecipes(Context context){
-        if(favRecipes == null){
+
             favRecipes = FavRecipeRepository.getFavRecipes(context);
-        }
+
         return favRecipes;
     }
 

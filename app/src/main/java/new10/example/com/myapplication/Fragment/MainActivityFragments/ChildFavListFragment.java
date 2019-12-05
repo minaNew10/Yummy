@@ -159,6 +159,7 @@ public class ChildFavListFragment extends ParentFragmentForMainlist {
                     });
                     recipesList.add(recipe);
                 }
+                cursor.move(-recipesList.size()-1);
                 adapter.setRecipes(recipesList);
             }
         });

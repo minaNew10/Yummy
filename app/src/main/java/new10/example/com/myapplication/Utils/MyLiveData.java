@@ -20,7 +20,8 @@ public abstract class MyLiveData<T> extends MutableLiveData<T> {
     ContentObserver observer;
 
     public MyLiveData(Uri uri, Context context) {
-
+        T t = getContentProviderValue();
+//        postValue(t);
         this.uri = uri;
         this.context = context;
     }
