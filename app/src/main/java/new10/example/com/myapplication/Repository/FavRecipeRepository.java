@@ -42,7 +42,7 @@ public class FavRecipeRepository {
             @Override
             public void run() {
                 Cursor cursor = context.getContentResolver().query(RecipeProvider.URI_RECIPE,projection,null,null,null);
-                Log.i(TAG, "run: ");cursor.getCount();
+
                 recipesInCursor.postValue(cursor);
             }
         });
@@ -124,7 +124,7 @@ public class FavRecipeRepository {
                 recipeValues.put(Recipe.COLUMN_IMAGE,item.getImage());
                 Uri uri = context.getContentResolver().insert(RecipeProvider.URI_RECIPE,recipeValues);
                 long id = ContentUris.parseId(uri);
-                Log.i(TAG, "bug id  in insert = " + id);
+                Log.i("Cursor", "recipe inserted with id = " + id);
 
                 for(int i = 0; i < steps.size();++i){
                     Step step = steps.get(i);
