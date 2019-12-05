@@ -12,9 +12,12 @@ import new10.example.com.myapplication.Model.Ingredient;
 import new10.example.com.myapplication.Model.Recipe;
 import new10.example.com.myapplication.Model.Step;
 import new10.example.com.myapplication.Utils.AppExecutors;
+import new10.example.com.myapplication.Utils.MyLiveData;
 
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Handler;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -29,9 +32,10 @@ public class FavRecipeRepository {
     private static Recipe currRecipe;
     private static boolean isFav;
     private static final String TAG = "bug";
-
+    static Cursor cursor;
     public static LiveData<Cursor> getFavRecipes(Context context) {
         MutableLiveData<Cursor> recipesInCursor = new MutableLiveData<>();
+
         final String[] projection = {
                 Recipe.COLUMN_ID,
                 Recipe.COLUMN_NAME,
@@ -42,30 +46,35 @@ public class FavRecipeRepository {
             @Override
             public void run() {
                 Cursor cursor = context.getContentResolver().query(RecipeProvider.URI_RECIPE,projection,null,null,null);
-
                 recipesInCursor.postValue(cursor);
             }
         });
 
         return recipesInCursor;
     }
-//    public static MyLiveData<Cursor> getMyLiveData(Context context){
-//        final String[] projection = {
-//                Recipe.COLUMN_ID,
-//                Recipe.COLUMN_NAME,
-//                Recipe.COLUMN_IMAGE,
-//                Recipe.COLUMN_SERVINGS,
-//        };
-//        MyLiveData<Cursor> myLiveData = new MyLiveData<Cursor>(RecipeProvider.URI_RECIPE,context) {
-//            @Override
-//            public Cursor getContentProviderValue() {
-//                Cursor cursor = context.getContentResolver().query(RecipeProvider.URI_RECIPE,projection,null,null,null);
-//                postValue(cursor);
-//                return cursor;
-//            }
-//        };
-//        return myLiveData;
-//    }
+    public static MyLiveData<Cursor> getMyLiveData(Context context){
+        final String[] projection = {
+                Recipe.COLUMN_ID,
+                Recipe.COLUMN_NAME,
+                Recipe.COLUMN_IMAGE,
+                Recipe.COLUMN_SERVINGS,
+        };
+        MyLiveData<Cursor> myLiveData = new MyLiveData<Cursor>(RecipeProvider.URI_RECIPE,context) {
+            @Override
+            public Cursor getContentProviderValue() {
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        cursor = context.getContentResolver().query(RecipeProvider.URI_RECIPE,projection,null,null,null);
+                        postValue(cursor);
+                    }
+                });
+                return cursor;
+            }
+        };
+        return myLiveData;
+    }
 
     public static LiveData<Cursor> getFavRecipeSteps(Context context, int recipeId){
         MutableLiveData<Cursor> stepsInCursor = new MutableLiveData<>();
@@ -81,11 +90,12 @@ public class FavRecipeRepository {
     }
     public static LiveData<Cursor> getFavRecipeIngredients(Context context, int recipeId){
         MutableLiveData<Cursor> ingredientInCursor = new MutableLiveData<>();
+
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
                 Cursor cursor  = context.getContentResolver().query(RecipeProvider.URI_INGREDIENT,null,null,null,null);
-                ingredientInCursor.postValue(cursor);
+
             }
         });
 
@@ -160,6 +170,8 @@ public class FavRecipeRepository {
             }
         });
     }
+
+
 
 
 
