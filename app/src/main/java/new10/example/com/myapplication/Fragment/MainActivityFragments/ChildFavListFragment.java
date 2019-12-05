@@ -28,7 +28,7 @@ public class ChildFavListFragment extends ParentFragmentForMainlist {
     private FavRecipesFragmentViewModel viewModel;
     private void setupViewModel() {
         viewModel = ViewModelProviders.of(getActivity()).get(FavRecipesFragmentViewModel.class);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.show_fav_recipes));
+
         viewModel.getFavRecipes(getActivity()).observe(getViewLifecycleOwner(), new Observer<Cursor>() {
             @Override
             public void onChanged(Cursor cursor) {
@@ -167,6 +167,7 @@ public class ChildFavListFragment extends ParentFragmentForMainlist {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.show_fav_recipes));
         //we intialize the view model here and not in oncreate because we want the data to be updated every time we create a view as
         // there is alife cycle for the fragmet instance and another for the view it contains so if we set the view model in oncreate
         //the data will not be updated as it is linked to the life cycle of the fragment itself we also want to be sure that the Activity is created

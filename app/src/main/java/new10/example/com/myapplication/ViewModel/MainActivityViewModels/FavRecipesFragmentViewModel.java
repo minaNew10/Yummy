@@ -12,14 +12,12 @@ import new10.example.com.myapplication.Model.Ingredient;
 import new10.example.com.myapplication.Model.Recipe;
 import new10.example.com.myapplication.Model.Step;
 import new10.example.com.myapplication.Repository.FavRecipeRepository;
-import new10.example.com.myapplication.Utils.MyLiveData;
 
 public class FavRecipesFragmentViewModel extends ViewModel {
 
     private LiveData<Cursor> favRecipes;
     private LiveData<Cursor> favSteps;
     private LiveData<Cursor> favIngredient;
-    private MyLiveData<Cursor> myLiveData;
 
     public LiveData<Cursor> getFavRecipes(Context context){
         if(favRecipes == null){

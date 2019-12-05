@@ -12,7 +12,6 @@ import new10.example.com.myapplication.Model.Ingredient;
 import new10.example.com.myapplication.Model.Recipe;
 import new10.example.com.myapplication.Model.Step;
 import new10.example.com.myapplication.Utils.AppExecutors;
-import new10.example.com.myapplication.Utils.MyLiveData;
 
 import android.database.Cursor;
 import android.net.Uri;
@@ -125,6 +124,7 @@ public class FavRecipeRepository {
                 recipeValues.put(Recipe.COLUMN_IMAGE,item.getImage());
                 Uri uri = context.getContentResolver().insert(RecipeProvider.URI_RECIPE,recipeValues);
                 long id = ContentUris.parseId(uri);
+                Log.i(TAG, "bug id  in insert = " + id);
 
                 for(int i = 0; i < steps.size();++i){
                     Step step = steps.get(i);
