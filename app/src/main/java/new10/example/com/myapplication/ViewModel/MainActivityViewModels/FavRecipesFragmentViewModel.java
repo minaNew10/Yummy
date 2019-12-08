@@ -33,6 +33,11 @@ public class FavRecipesFragmentViewModel extends ViewModel {
         }
         return myLiveData;
     }
+    public MyLiveData<Cursor> QueryMyLiveDataFavRecipes(Context context){
+            myLiveData = FavRecipeRepository.getMyLiveData(context);
+        return myLiveData;
+    }
+
     public LiveData<Cursor> getFavRecipeSteps(Context context, int recipeId){
             favSteps = FavRecipeRepository.getFavRecipeSteps(context,recipeId);
         return favSteps;

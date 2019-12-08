@@ -33,6 +33,7 @@ import new10.example.com.myapplication.ViewModel.MainActivityViewModels.FavRecip
 public class ChildFavListFragment extends ParentFragmentForMainlist {
     private static final String TAG = "ChildFavListFragment";
     private FavRecipesFragmentViewModel viewModel;
+    boolean secondVisit;
     private void handleCursor(Cursor cursor){
         List<Recipe> recipesList = new ArrayList<>();
         int id_index = cursor.getColumnIndex(Recipe.COLUMN_ID);
@@ -102,24 +103,21 @@ public class ChildFavListFragment extends ParentFragmentForMainlist {
         adapter.setRecipes(recipesList);
         cursor.move(-recipesList.size() - 1);
     }
-    private void setupViewModel() {
-//        viewModel = ViewModelProviders.of(getActivity()).get(FavRecipesFragmentViewModel.class);
-//
-//        viewModel.getFavRecipes(getActivity()).observe(getViewLifecycleOwner(), new Observer<Cursor>() {
-//            @Override
-//            public void onChanged(Cursor cursor) {
-//                handleCursor(cursor);
-//            }
-//        });
-        viewModel = ViewModelProviders.of(getActivity()).get(FavRecipesFragmentViewModel.class);
 
-        viewModel.getMyLiveDataFavRecipes(getActivity()).observe(getViewLifecycleOwner(), new Observer<Cursor>() {
-            @Override
-            public void onChanged(Cursor cursor) {
-                handleCursor(cursor);
-            }
-        });
-
+    @Override
+    public void onResume() {
+//        flag to prevent visinting requering in the first time;
+        if(secondVisit){
+            viewModel.QueryMyLiveDataFavRecipes(getActivity()).observe(getViewLifecycleOwner(), new Observer<Cursor>() {
+                @Override
+                public void onChanged(Cursor cursor) {
+                    handleCursor(cursor);
+                }
+            });
+        }else {
+            secondVisit = true;
+        }
+        super.onResume();
     }
 
     @Override
@@ -136,16 +134,29 @@ public class ChildFavListFragment extends ParentFragmentForMainlist {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if(!EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().register(this);
+        //to prevent on resume from requery the database in case of rotation
+        secondVisit = false;
+        viewModel = ViewModelProviders.of(getActivity()).get(FavRecipesFragmentViewModel.class);
+        if(savedInstanceState != null) {
+            //in case of screen rotation
+            viewModel.getMyLiveDataFavRecipes(getActivity()).observe(getViewLifecycleOwner(), new Observer<Cursor>() {
+                @Override
+                public void onChanged(Cursor cursor) {
+                    handleCursor(cursor);
+                }
+            });
+
+        }
+        else
+
+            viewModel.QueryMyLiveDataFavRecipes(getActivity()).observe(getViewLifecycleOwner(), new Observer<Cursor>() {
+                @Override
+                public void onChanged(Cursor cursor) {
+                    handleCursor(cursor);
+                }
+            });
 
         return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        setupViewModel();
     }
 
     @Override
@@ -154,16 +165,5 @@ public class ChildFavListFragment extends ParentFragmentForMainlist {
         menu.getItem(0).setTitle(R.string.show_main_list);
     }
 
-    // This method will be called when a MessageEvent is posted (in the UI thread)
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(EventMessage event) {
-        viewModel.setMyLiveData(null);
-        Log.i(TAG, "onMessageEvent: " + event.message);
-    }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-//        EventBus.getDefault().unregister(this);
-    }
 }
