@@ -10,9 +10,7 @@ public class MainActivityViewModel extends ViewModel {
     private ChildFavListFragment favListFragment;
 
     public ChildFavListFragment getFavFragment(){
-        if(favListFragment == null){
             favListFragment = new ChildFavListFragment();
-        }
         return favListFragment;
     }
 

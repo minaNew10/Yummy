@@ -12,6 +12,7 @@ import new10.example.com.myapplication.Model.Ingredient;
 import new10.example.com.myapplication.Model.Recipe;
 import new10.example.com.myapplication.Model.Step;
 import new10.example.com.myapplication.Utils.AppExecutors;
+import new10.example.com.myapplication.Utils.EventMessage;
 import new10.example.com.myapplication.Utils.MyLiveData;
 
 import android.database.ContentObserver;
@@ -21,6 +22,8 @@ import android.os.Handler;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -157,6 +160,7 @@ public class FavRecipeRepository {
                 }
             }
         });
+        EventBus.getDefault().post(new EventMessage("recipe inserted"));
     }
 
 
@@ -169,10 +173,8 @@ public class FavRecipeRepository {
                 context.getContentResolver().delete(recipeUri,null,null);
             }
         });
+        EventBus.getDefault().post(new EventMessage("recipe removed"));
     }
 
-
-
-
-
 }
+

@@ -42,4 +42,12 @@ public class FavRecipesFragmentViewModel extends ViewModel {
             favIngredient = FavRecipeRepository.getFavRecipeIngredients(context,recipeId);
         return favIngredient;
     }
+
+    public void setFavRecipes(LiveData<Cursor> favRecipes) {
+        this.favRecipes = favRecipes;
+    }
+
+    public void setMyLiveData(MyLiveData<Cursor> myLiveData) {
+        this.myLiveData = myLiveData;
+    }
 }

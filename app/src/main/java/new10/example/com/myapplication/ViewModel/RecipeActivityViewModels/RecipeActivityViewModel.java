@@ -5,6 +5,9 @@ import android.content.Context;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import org.greenrobot.eventbus.EventBus;
+
+import new10.example.com.myapplication.Fragment.MainActivityFragments.ChildFavListFragment;
 import new10.example.com.myapplication.Fragment.RecipeActivityFragments.IngredientFragment;
 import new10.example.com.myapplication.Fragment.RecipeActivityFragments.RecipeFragment;
 import new10.example.com.myapplication.Fragment.RecipeActivityFragments.StepFragment;
@@ -34,12 +37,16 @@ public class RecipeActivityViewModel extends ViewModel {
 
 
     public void insertRecipeIntoFav(Recipe recipe, Context context){
+
         FavRecipeRepository.insertRecipeIntoFav(recipe,context);
+
 
     }
 
     public void removeRecipeFromFav(Recipe recipe,Context context){
+
         FavRecipeRepository.removeRecipeFromFav(recipe,context);
+
     }
 
     public MutableLiveData<Boolean> isFav(Context context, Recipe recipe){

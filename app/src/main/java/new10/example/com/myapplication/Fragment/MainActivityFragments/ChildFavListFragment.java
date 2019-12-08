@@ -8,11 +8,16 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +27,11 @@ import new10.example.com.myapplication.Model.Ingredient;
 import new10.example.com.myapplication.Model.Recipe;
 import new10.example.com.myapplication.Model.Step;
 import new10.example.com.myapplication.R;
+import new10.example.com.myapplication.Utils.EventMessage;
 import new10.example.com.myapplication.ViewModel.MainActivityViewModels.FavRecipesFragmentViewModel;
 
 public class ChildFavListFragment extends ParentFragmentForMainlist {
+    private static final String TAG = "ChildFavListFragment";
     private FavRecipesFragmentViewModel viewModel;
     private void handleCursor(Cursor cursor){
         List<Recipe> recipesList = new ArrayList<>();
@@ -87,11 +94,11 @@ public class ChildFavListFragment extends ParentFragmentForMainlist {
 
                 }
             });
-            Log.i("Cursor in Fav Fragment", "onChanged: recipe name " + recipe.getName());
+
             recipesList.add(recipe);
         }
 
-        Log.i("Cursor in Fav Fragment", "onChanged: recipe list size:" + recipesList.size());
+
         adapter.setRecipes(recipesList);
         cursor.move(-recipesList.size() - 1);
     }
@@ -129,13 +136,34 @@ public class ChildFavListFragment extends ParentFragmentForMainlist {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        setupViewModel();
+        if(!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
+
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setupViewModel();
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.getItem(0).setTitle(R.string.show_main_list);
+    }
+
+    // This method will be called when a MessageEvent is posted (in the UI thread)
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventMessage event) {
+        viewModel.setMyLiveData(null);
+        Log.i(TAG, "onMessageEvent: " + event.message);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+//        EventBus.getDefault().unregister(this);
     }
 }
