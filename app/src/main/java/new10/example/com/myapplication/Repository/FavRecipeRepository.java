@@ -160,7 +160,7 @@ public class FavRecipeRepository {
                 }
             }
         });
-        EventBus.getDefault().post(new EventMessage("recipe inserted"));
+//        EventBus.getDefault().post(new EventMessage("recipe inserted"));
     }
 
 
@@ -173,7 +173,7 @@ public class FavRecipeRepository {
                 context.getContentResolver().delete(recipeUri,null,null);
             }
         });
-        EventBus.getDefault().post(new EventMessage("recipe removed"));
+//        EventBus.getDefault().post(new EventMessage("recipe removed"));
     }
 
 }

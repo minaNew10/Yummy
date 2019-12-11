@@ -20,4 +20,6 @@
     <string name="key_title_recipe_name" translatable="false">recipe ingredient</string>
     <string name="fav_fragment_tag">favourites fragment</string>
     <string name="show_main_list">Home</string>
+    <string name="empty_appwidget_text">No saved recipes</string>
+    <string name="add_widget">Add widget</string>
 </resources>
