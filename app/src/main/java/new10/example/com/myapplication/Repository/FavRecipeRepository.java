@@ -34,7 +34,7 @@ public class FavRecipeRepository {
     private static AppDatabase appDatabase;
     private static Recipe currRecipe;
     private static boolean isFav;
-    private static final String TAG = "bug";
+    private static final String TAG = "FavRecipeRepository";
     static Cursor cursor;
     public static LiveData<Cursor> getFavRecipes(Context context) {
         MutableLiveData<Cursor> recipesInCursor = new MutableLiveData<>();
@@ -70,6 +70,7 @@ public class FavRecipeRepository {
                     @Override
                     public void run() {
                         cursor = context.getContentResolver().query(RecipeProvider.URI_RECIPE,projection,null,null,null);
+                        Log.i(TAG, "run: Recipes cursor size = "+ cursor.getCount());
                         postValue(cursor);
                     }
                 });
@@ -80,11 +81,13 @@ public class FavRecipeRepository {
     }
 
     public static LiveData<Cursor> getFavRecipeSteps(Context context, int recipeId){
+        String[] arr = {String.valueOf(recipeId)};
         MutableLiveData<Cursor> stepsInCursor = new MutableLiveData<>();
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                Cursor cursor  = context.getContentResolver().query(RecipeProvider.URI_STEP,null,null,null,null);
+                Cursor cursor  = context.getContentResolver().query(RecipeProvider.URI_STEP,null,Step.COLUMN_RECIPE_ID,arr,null);
+                Log.i(TAG, "run: steps cursor size = "+ cursor.getCount());
                 stepsInCursor.postValue(cursor);
             }
         });
@@ -92,13 +95,16 @@ public class FavRecipeRepository {
         return stepsInCursor;
     }
     public static LiveData<Cursor> getFavRecipeIngredients(Context context, int recipeId){
+       
+        String[] arr = {String.valueOf(recipeId)};
         MutableLiveData<Cursor> ingredientInCursor = new MutableLiveData<>();
 
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                Cursor cursor  = context.getContentResolver().query(RecipeProvider.URI_INGREDIENT,null,null,null,null);
-
+                Cursor cursor  = context.getContentResolver().query(RecipeProvider.URI_INGREDIENT,null,Ingredient.COLUMN_RECIPE_ID,arr,null);
+                Log.i(TAG, "run: Ingredients cursor size = "+ cursor.getCount());
+                ingredientInCursor.postValue(cursor);
             }
         });
 
@@ -137,7 +143,6 @@ public class FavRecipeRepository {
                 recipeValues.put(Recipe.COLUMN_IMAGE,item.getImage());
                 Uri uri = context.getContentResolver().insert(RecipeProvider.URI_RECIPE,recipeValues);
                 long id = ContentUris.parseId(uri);
-                Log.i("Cursor", "recipe inserted with id = " + id);
 
                 for(int i = 0; i < steps.size();++i){
                     Step step = steps.get(i);

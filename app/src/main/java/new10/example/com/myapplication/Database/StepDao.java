@@ -30,6 +30,9 @@ public interface StepDao {
     @Query("SELECT * FROM step")
     Cursor getAllStepsInCursor();
 
+    @Query("SELECT * FROM step WHERE recipe_id =:recipe_id")
+    Cursor getRecipeStepsInCursor(int recipe_id);
+
     @Query("SElECT * FROM step WHERE recipe_id =:recipe_id")
     LiveData<List<Step>> findStepsForRecipe(int recipe_id);
 }

@@ -61,6 +61,9 @@ public class RecipeProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] strings, @Nullable String s, @Nullable String[] strings1, @Nullable String s1) {
         final Context context = getContext();
+        int recipe_id =0;
+        if(strings1 != null)
+            recipe_id = Integer.valueOf(strings1[0]);
         Cursor cursor;
         if (context == null) {
             return null;
@@ -71,10 +74,18 @@ public class RecipeProvider extends ContentProvider {
                 cursor = AppDatabase.getInstance(context).recipeDao().getAllRecipesInCursor();
                 break;
             case STEPS:
-                cursor = AppDatabase.getInstance(context).stepDao().getAllStepsInCursor();
+                if(strings1 != null) {
+                    cursor = AppDatabase.getInstance(context).stepDao().getRecipeStepsInCursor(recipe_id);
+                }else {
+                    cursor = AppDatabase.getInstance(context).stepDao().getAllStepsInCursor();
+                }
                 break;
             case INGREDIENTS:
-                cursor = AppDatabase.getInstance(context).ingredientDao().getAllIngredientsInCursor();
+                if(strings1 != null){
+                    cursor = AppDatabase.getInstance(context).ingredientDao().getRecipeIngredientsInCursor(recipe_id);
+                }else{
+                    cursor = AppDatabase.getInstance(context).ingredientDao().getAllIngredientsInCursor();
+                }
                 break;
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);

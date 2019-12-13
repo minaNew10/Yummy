@@ -28,6 +28,9 @@ public interface IngredientDao {
     @Query("SELECT * FROM ingredient")
     Cursor getAllIngredientsInCursor();
 
+    @Query("SELECT * FROM ingredient WHERE recipe_id =:recipe_id")
+    Cursor getRecipeIngredientsInCursor(int recipe_id);
+
     @Query("SElECT * FROM ingredient WHERE recipe_id =:recipe_id")
     LiveData<List<Ingredient>> findIngredientsForRecipe(int recipe_id);
 
