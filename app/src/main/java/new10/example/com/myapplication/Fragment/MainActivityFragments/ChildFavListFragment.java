@@ -8,26 +8,17 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import new10.example.com.myapplication.Activity.MainActivity;
 import new10.example.com.myapplication.Model.Ingredient;
 import new10.example.com.myapplication.Model.Recipe;
 import new10.example.com.myapplication.Model.Step;
 import new10.example.com.myapplication.R;
-import new10.example.com.myapplication.Utils.EventMessage;
 import new10.example.com.myapplication.ViewModel.MainActivityViewModels.FavRecipesFragmentViewModel;
 
 public class ChildFavListFragment extends ParentFragmentForMainlist {
@@ -40,8 +31,6 @@ public class ChildFavListFragment extends ParentFragmentForMainlist {
         int name_index = cursor.getColumnIndex(Recipe.COLUMN_NAME);
         int serving_index = cursor.getColumnIndex(Recipe.COLUMN_SERVINGS);
         int image_index = cursor.getColumnIndex(Recipe.COLUMN_IMAGE);
-
-        Log.i("Cursor in Fav Fragment", "onChanged: count of cursor " + cursor.getCount() + " position : " + cursor.getPosition());
         while (cursor.moveToNext()) {
             int id = cursor.getInt(id_index);
             String name = cursor.getString(name_index);
@@ -49,7 +38,6 @@ public class ChildFavListFragment extends ParentFragmentForMainlist {
             int servings = cursor.getInt(serving_index);
 
             Recipe recipe = new Recipe(id, name, servings, image);
-            Log.i("Cursor in Fav Fragment", "onChanged: recipe name in on changed " + recipe.getName());
             viewModel.getFavRecipeSteps(getActivity(), recipe.getId()).observe(getViewLifecycleOwner(), new Observer<Cursor>() {
                 @Override
                 public void onChanged(Cursor cursor) {

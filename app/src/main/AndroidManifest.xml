@@ -21,6 +21,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/recipe_widget_provider_info" />
         </receiver>
+        <service android:name=".Widget.IngredientsViewService"></service>
 
         <activity android:name=".Activity.RecipeActivity" />
         <activity android:name=".Activity.MainActivity">
@@ -30,12 +31,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".Widget.GridWidgetService"
-            android:permission="android.permissions.BIND_REMOTEVIEWS"></service>
+
         <provider
             android:name=".Database.RecipeProvider"
             android:authorities="new10.example.com.myapplication"
             android:exported="true" />
     </application>
+
 
 </manifest>
