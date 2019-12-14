@@ -21,7 +21,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/recipe_widget_provider_info" />
         </receiver>
-        <service android:name=".Widget.IngredientsViewService"></service>
+
 
         <activity android:name=".Activity.RecipeActivity" />
         <activity android:name=".Activity.MainActivity">

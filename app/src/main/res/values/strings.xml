@@ -22,4 +22,6 @@
     <string name="show_main_list">Home</string>
     <string name="empty_appwidget_text">No saved recipes</string>
     <string name="add_widget">Add widget</string>
+    <string name="saved_ingredients">saved ingredients</string>
+    <string name="shared_pref">shared pref</string>
 </resources>

@@ -2,14 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/colorPrimaryLight"
     android:layout_height="match_parent">
 
-
     <TextView
-        android:id="@+id/txtv_widget_Ingredients"
+        android:id="@+id/txtv_widget_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        app:background="@color/colorPrimaryLight"
+        app:color="@color/colorPrimaryDark"
+        style="@style/TitleViewTexts"
+        />
+
+    <TextView
+        android:id="@+id/txtv_widget_Ingredients"
+        style="@style/DetailViewTexts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:background="@color/colorPrimaryLight"
         app:color="@color/colorPrimaryDark"
      />

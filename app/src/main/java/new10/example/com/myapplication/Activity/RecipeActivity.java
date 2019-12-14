@@ -6,6 +6,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,11 +18,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.List;
+
 import new10.example.com.myapplication.Database.RecipeProvider;
 import new10.example.com.myapplication.Fragment.RecipeActivityFragments.RecipeFragment;
+import new10.example.com.myapplication.Model.Ingredient;
 import new10.example.com.myapplication.Model.Recipe;
 import new10.example.com.myapplication.R;
 import new10.example.com.myapplication.ViewModel.RecipeActivityViewModels.RecipeActivityViewModel;
+import new10.example.com.myapplication.Widget.RecipeWidgetProvider;
 
 public class RecipeActivity extends AppCompatActivity {
 
@@ -38,6 +46,7 @@ public class RecipeActivity extends AppCompatActivity {
         bundle = getIntent().getExtras();
         getContentResolver().registerContentObserver(RecipeProvider.URI_RECIPE,true,myContentObserver);
         recipe = bundle.getParcelable(getString(R.string.recipe_tag));
+        extractIngredientsForWidget();
         toast = Toast.makeText(this,"",Toast.LENGTH_SHORT);
         setActionBarTitle(recipe.getName());
 
@@ -49,6 +58,26 @@ public class RecipeActivity extends AppCompatActivity {
                     .add(R.id.recipe_fragment_container, recipeFragment,getString(R.string.recipe_fragment_tag))
                     .commit();
         }
+    }
+
+    private  void extractIngredientsForWidget() {
+        List<Ingredient> ingredients = recipe.getIngredients();
+        StringBuilder ingredientsSb = new StringBuilder();
+        for (int i = 0; i < ingredients.size(); i++) {
+            Ingredient ingredient = ingredients.get(i);
+            ingredientsSb.append(ingredient.getQuantity() + " " + ingredient.getMeasure() + " " + ingredient.getIngredient());
+            if(i != ingredients.size()-1)
+                ingredientsSb.append("\n");
+        }
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.shared_pref),Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(getString(R.string.key_recipe_name),recipe.getName());
+        editor.putString(getString(R.string.saved_ingredients), ingredientsSb.toString());
+        editor.commit();
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        int[] appWidgetsId = appWidgetManager.getAppWidgetIds
+                (new ComponentName(this,RecipeWidgetProvider.class));
+
     }
 
     private void setupViewModel() {
