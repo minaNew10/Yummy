@@ -25,6 +25,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import new10.example.com.myapplication.Activity.RecipeActivity;
 import new10.example.com.myapplication.Adapter.RecipeDetailsAdapter;
 import new10.example.com.myapplication.Model.Recipe;
 import new10.example.com.myapplication.R;
@@ -59,6 +60,11 @@ public class RecipeFragment extends Fragment implements RecipeDetailsAdapter.Rec
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipe_detail,container,false);
+        //in case of pressing back from the landscape mode of the video show in step fragment the action bar will not appear
+        //so to ensure it's existence we show it here
+        if(((RecipeActivity)getActivity()).getSupportActionBar() != null){
+            ((RecipeActivity)getActivity()).getSupportActionBar().show();
+        }
         ButterKnife.bind(this,view);
         Bundle b = getArguments();
         currRecipe = b.getParcelable(getString(R.string.recipe_tag));

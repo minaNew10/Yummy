@@ -1,18 +1,24 @@
 package new10.example.com.myapplication.Fragment.RecipeActivityFragments;
 
 import android.annotation.SuppressLint;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -32,6 +38,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import new10.example.com.myapplication.Activity.RecipeActivity;
 import new10.example.com.myapplication.Model.Step;
 import new10.example.com.myapplication.R;
 import new10.example.com.myapplication.ViewModel.RecipeActivityViewModels.StepFragmentViewModel;
@@ -81,6 +88,14 @@ public class StepFragment extends Fragment {
 
     private void populateUi(){
         currStep = viewModel.getStep();
+        //make ui components visible in case of being invisible due to rotation
+        if(((RecipeActivity)getActivity()).getSupportActionBar() != null){
+            ((RecipeActivity)getActivity()).getSupportActionBar().show();
+        }
+        tvInstruction.setVisibility(View.VISIBLE);
+        txtvShortDesc.setVisibility(View.VISIBLE);
+        imgNext.setVisibility(View.VISIBLE);
+        imgPrev.setVisibility(View.VISIBLE);
         imgNext.setClickable(true);
         imgNext.setAlpha(1.0f);
         imgPrev.setClickable(true);
@@ -109,9 +124,6 @@ public class StepFragment extends Fragment {
             player.seekTo(currentWindow, playbackPosition);
         }
         Uri uri = Uri.parse(currStep.getVideoURL());
-//        MediaSource mediaSource = buildMediaSource(uri);
-//        player.prepare(mediaSource, true, false);
-
         // Produces DataSource instances through which media data is loaded.
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getActivity(),
                 Util.getUserAgent(getActivity(), "Yummy"));
@@ -120,6 +132,21 @@ public class StepFragment extends Fragment {
                 .createMediaSource(uri);
         // Prepare the player with the source.
         player.prepare(videoSource);
+        int orientation = this.getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            if(((RecipeActivity)getActivity()).getSupportActionBar() != null){
+                ((RecipeActivity)getActivity()).getSupportActionBar().hide();
+            }
+            tvInstruction.setVisibility(View.GONE);
+            txtvShortDesc.setVisibility(View.GONE);
+            imgNext.setVisibility(View.GONE);
+            imgPrev.setVisibility(View.GONE);
+
+            DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
+            ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(displayMetrics.widthPixels,displayMetrics.heightPixels);
+            playerView.setLayoutParams(params);
+        }
+
     }
 
 
@@ -150,12 +177,20 @@ public class StepFragment extends Fragment {
 
     @SuppressLint("InlinedApi")
     private void hideSystemUi() {
-        playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
+        int orientation = this.getResources().getConfiguration().orientation;
+        if(orientation == Configuration.ORIENTATION_LANDSCAPE){
+            playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
+        }else {
+            playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN
 //                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            );
+        }
     }
 
     @Override

@@ -33,13 +33,23 @@ public class MainActivityScreenTest {
     private static final String TAG = "MainActivityScreenTest";
     @Rule
     public ActivityTestRule<MainActivity> mMainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
-//
-//    @Test
-//    public void testSampleRecyclerVisible(){
-//        onView(ViewMatchers.withId(R.id.recycler_recipes_main))
-//                .inRoot(RootMatchers.withDecorView(Matchers.is(mMainActivityTestRule.getActivity().getWindow().getDecorView())))
-//                .check(matches(isDisplayed()));
-//    }
+
+    @Test
+    public void testSampleRecyclerVisible(){
+        onView(ViewMatchers.withId(R.id.recycler_recipes_main))
+                .inRoot(RootMatchers.withDecorView(Matchers.is(mMainActivityTestRule.getActivity().getWindow().getDecorView())))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testCaseForRecyclerScroll(){
+        RecyclerView recyclerView = mMainActivityTestRule.getActivity().findViewById(R.id.recycler_recipes_main);
+        int itemCount = recyclerView.getAdapter().getItemCount();
+
+        onView(ViewMatchers.withId(R.id.recycler_recipes_main))
+                .inRoot(RootMatchers.withDecorView(Matchers.is(mMainActivityTestRule.getActivity().getWindow().getDecorView())))
+                .perform(RecyclerViewActions.scrollToPosition(itemCount-1));
+    }
 
     @Test
     public void clickRecyclerView_opensRecipeActivity(){
@@ -52,16 +62,6 @@ public class MainActivityScreenTest {
                 withParent(withResourceName("action_bar"))))
                 .check(matches(withText("Nutella Pie")));
     }
-
-//    @Test
-//    public void testCaseForRecyclerScroll(){
-//        RecyclerView recyclerView = mMainActivityTestRule.getActivity().findViewById(R.id.recycler_recipes_main);
-//        int itemCount = recyclerView.getAdapter().getItemCount();
-//
-//        onView(ViewMatchers.withId(R.id.recycler_recipes_main))
-//                .inRoot(RootMatchers.withDecorView(Matchers.is(mMainActivityTestRule.getActivity().getWindow().getDecorView())))
-//                .perform(RecyclerViewActions.scrollToPosition(itemCount-1));
-//    }
 
 //    @Test
 //    public void testCaseForRecyclerItemView(){
