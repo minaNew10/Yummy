@@ -53,7 +53,9 @@ public class StepFragment extends Fragment {
     private long playbackPosition ;
     private int currentWindow;
     private StepFragmentViewModel viewModel;
+    boolean isTablet;
     Bundle b;
+
     @BindView(R.id.txtv_instruction) public TextView tvInstruction;
     @BindView(R.id.video_view) public PlayerView playerView;
     @BindView(R.id.imgv_prev) public ImageView imgPrev;
@@ -63,6 +65,7 @@ public class StepFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_step_detail,container,false);
+        isTablet = getResources().getBoolean(R.bool.isTablet);
         ButterKnife.bind(this,v);
         b = getArguments();
         stepList = b.getParcelableArrayList(getString(R.string.key_steps));
@@ -133,7 +136,7 @@ public class StepFragment extends Fragment {
         // Prepare the player with the source.
         player.prepare(videoSource);
         int orientation = this.getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE && !isTablet) {
             if(((RecipeActivity)getActivity()).getSupportActionBar() != null){
                 ((RecipeActivity)getActivity()).getSupportActionBar().hide();
             }
@@ -146,7 +149,6 @@ public class StepFragment extends Fragment {
             ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(displayMetrics.widthPixels,displayMetrics.heightPixels);
             playerView.setLayoutParams(params);
         }
-
     }
 
 
@@ -185,7 +187,7 @@ public class StepFragment extends Fragment {
         }else {
             playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
                     | View.SYSTEM_UI_FLAG_FULLSCREEN
-//                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION

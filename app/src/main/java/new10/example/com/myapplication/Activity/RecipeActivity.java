@@ -18,10 +18,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import new10.example.com.myapplication.Database.RecipeProvider;
+import new10.example.com.myapplication.Fragment.RecipeActivityFragments.IngredientFragment;
 import new10.example.com.myapplication.Fragment.RecipeActivityFragments.RecipeFragment;
+import new10.example.com.myapplication.Fragment.RecipeActivityFragments.StepFragment;
 import new10.example.com.myapplication.Model.Ingredient;
 import new10.example.com.myapplication.Model.Recipe;
 import new10.example.com.myapplication.R;
@@ -32,9 +35,11 @@ public class RecipeActivity extends AppCompatActivity {
 
     private RecipeActivityViewModel viewModel;
     RecipeFragment recipeFragment;
+    IngredientFragment ingredientFragment;
     Toast toast;
     Recipe recipe;
     boolean isFav;
+    boolean isTablet;
     Bundle bundle;
     MyContentObserver myContentObserver = new MyContentObserver(null);
     private static final String TAG = "RecipeActivity";
@@ -47,16 +52,24 @@ public class RecipeActivity extends AppCompatActivity {
         getContentResolver().registerContentObserver(RecipeProvider.URI_RECIPE,true,myContentObserver);
         recipe = bundle.getParcelable(getString(R.string.recipe_tag));
         extractIngredientsForWidget();
+        isTablet = getResources().getBoolean(R.bool.isTablet);
         toast = Toast.makeText(this,"",Toast.LENGTH_SHORT);
         setActionBarTitle(recipe.getName());
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         setupViewModel();
         if(savedInstanceState == null) {
-
             fragmentManager.beginTransaction()
                     .add(R.id.recipe_fragment_container, recipeFragment,getString(R.string.recipe_fragment_tag))
                     .commit();
+            if(isTablet){
+                Bundle ingredientsBundle = new Bundle();
+                ingredientsBundle.putParcelableArrayList(getString(R.string.key_ingredients),(ArrayList)recipe.getIngredients());
+                ingredientFragment.setArguments(ingredientsBundle);
+                fragmentManager.beginTransaction()
+                        .add(R.id.step_fragment_container_tab,ingredientFragment,getString(R.string.tag_step_fragment))
+                        .commit();
+            }
         }
     }
 
@@ -74,15 +87,16 @@ public class RecipeActivity extends AppCompatActivity {
         editor.putString(getString(R.string.key_recipe_name),recipe.getName());
         editor.putString(getString(R.string.saved_ingredients), ingredientsSb.toString());
         editor.commit();
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-        int[] appWidgetsId = appWidgetManager.getAppWidgetIds
-                (new ComponentName(this,RecipeWidgetProvider.class));
+//        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+//        int[] appWidgetsId = appWidgetManager.getAppWidgetIds
+//                (new ComponentName(this,RecipeWidgetProvider.class));
 
     }
 
     private void setupViewModel() {
         viewModel = ViewModelProviders.of(this).get(RecipeActivityViewModel.class);
         recipeFragment = viewModel.getRecipeFragment();
+        ingredientFragment = viewModel.getIngredientFragment();
         recipeFragment.setArguments(bundle);
         MutableLiveData<Boolean> isFavLive = viewModel.isFav(this,recipe);
         isFavLive.observe(this, new Observer<Boolean>() {
@@ -139,14 +153,11 @@ public class RecipeActivity extends AppCompatActivity {
     }
 
     private void delRecipe() {
-
         viewModel.removeRecipeFromFav(recipe,this);
-        
     }
 
     private void saveRecipe() {
         viewModel.insertRecipeIntoFav(recipe,this);
-
     }
 }
 //this class is for learning purpose

@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,8 +43,15 @@ public class ParentFragmentForMainlist extends Fragment implements MainRecipesAd
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipes_recycler,container,false);
         ButterKnife.bind(this,view);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getActivity(),RecyclerView.VERTICAL,false);
-        recyclerView.setLayoutManager(layoutManager);
+        boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
+        RecyclerView.LayoutManager layoutManager;
+        if(tabletSize){
+             layoutManager = new GridLayoutManager(this.getActivity(),3);
+             recyclerView.setLayoutManager(layoutManager);
+        }else {
+             layoutManager = new LinearLayoutManager(this.getActivity(), RecyclerView.VERTICAL, false);
+             recyclerView.setLayoutManager(layoutManager);
+        }
         adapter = new MainRecipesAdapter(getActivity(),this);
         recyclerView.setAdapter(adapter);
         toast = Toast.makeText(getActivity(),"",Toast.LENGTH_LONG);

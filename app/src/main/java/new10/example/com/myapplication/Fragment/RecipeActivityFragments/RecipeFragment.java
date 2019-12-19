@@ -38,7 +38,7 @@ public class RecipeFragment extends Fragment implements RecipeDetailsAdapter.Rec
     @BindView(R.id.recycler_recipe_detail)
     public RecyclerView recyclerView;
     Recipe currRecipe;
-
+    boolean isTablet;
     RecipeDetailsAdapter adapter;
     IngredientFragment ingredientFragment;
     StepFragment stepFragment;
@@ -53,7 +53,7 @@ public class RecipeFragment extends Fragment implements RecipeDetailsAdapter.Rec
         viewModel.setRecipe(recipe);
         currRecipe = viewModel.getRecipe();
 
-        stepFragment = viewModel.getStepFragment();
+
         ingredientFragment = viewModel.getIngredientFragment();
     }
     @Nullable
@@ -62,6 +62,7 @@ public class RecipeFragment extends Fragment implements RecipeDetailsAdapter.Rec
         View view = inflater.inflate(R.layout.fragment_recipe_detail,container,false);
         //in case of pressing back from the landscape mode of the video show in step fragment the action bar will not appear
         //so to ensure it's existence we show it here
+        isTablet = getActivity().getResources().getBoolean(R.bool.isTablet);
         if(((RecipeActivity)getActivity()).getSupportActionBar() != null){
             ((RecipeActivity)getActivity()).getSupportActionBar().show();
         }
@@ -83,22 +84,34 @@ public class RecipeFragment extends Fragment implements RecipeDetailsAdapter.Rec
     @Override
     public void onClick(Recipe recipe,int position) {
         if(position == 0){
-            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null);
-            Bundle ingredientsBundle = new Bundle();
-            ingredientsBundle.putParcelableArrayList(getString(R.string.key_ingredients),(ArrayList)currRecipe.getIngredients());
-            ingredientFragment.setArguments(ingredientsBundle);
-            ft.replace(R.id.recipe_fragment_container,ingredientFragment,getString(R.string.tag_ingredient_fragment));
-            ft.commit();
-        }else {
-            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null);
 
+            Bundle ingredientsBundle = new Bundle();
+            ingredientsBundle.putParcelableArrayList(getString(R.string.key_ingredients), (ArrayList) currRecipe.getIngredients());
+            ingredientFragment.setArguments(ingredientsBundle);
+            if(isTablet){
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.step_fragment_container_tab,ingredientFragment,getString(R.string.tag_ingredient_fragment));
+                ft.commit();
+            }else {
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null);
+                ft.replace(R.id.recipe_fragment_container, ingredientFragment, getString(R.string.tag_ingredient_fragment));
+                ft.commit();
+            }
+        }else {
             Bundle stepsBundle = new Bundle();
+            stepFragment = new StepFragment();
             stepsBundle.putParcelableArrayList(getString(R.string.key_steps),(ArrayList)currRecipe.getSteps());
             stepsBundle.putInt(getString(R.string.key_position),position);
-
             stepFragment.setArguments(stepsBundle);
-            ft.replace(R.id.recipe_fragment_container,stepFragment,getString(R.string.tag_step_fragment));
-            ft.commit();
+            if(isTablet){
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.step_fragment_container_tab, stepFragment, getString(R.string.tag_step_fragment));
+                ft.commit();
+            }else {
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null);
+                ft.replace(R.id.recipe_fragment_container, stepFragment, getString(R.string.tag_step_fragment));
+                ft.commit();
+            }
         }
     }
 }

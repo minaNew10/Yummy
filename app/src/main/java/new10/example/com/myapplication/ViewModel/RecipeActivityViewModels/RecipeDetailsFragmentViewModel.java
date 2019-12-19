@@ -32,9 +32,7 @@ public class RecipeDetailsFragmentViewModel extends ViewModel {
     }
 
     public StepFragment getStepFragment(){
-        if(stepFragment == null){
             stepFragment = new StepFragment();
-        }
         return stepFragment;
     }
 

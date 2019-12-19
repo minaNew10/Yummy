@@ -16,6 +16,7 @@ import new10.example.com.myapplication.Repository.FavRecipeRepository;
 
 public class RecipeActivityViewModel extends ViewModel {
     private RecipeFragment recipeFragment;
+    private IngredientFragment ingredientFragment;
 
     private Recipe recipe;
 
@@ -32,6 +33,12 @@ public class RecipeActivityViewModel extends ViewModel {
             recipeFragment = new RecipeFragment();
         }
         return recipeFragment;
+    }
+    public IngredientFragment getIngredientFragment() {
+        if(ingredientFragment == null){
+            ingredientFragment = new IngredientFragment();
+        }
+        return ingredientFragment;
     }
 
 
@@ -53,4 +60,6 @@ public class RecipeActivityViewModel extends ViewModel {
         return FavRecipeRepository.isFavRecipe(context,recipe.getId());
 
     }
+
+
 }
