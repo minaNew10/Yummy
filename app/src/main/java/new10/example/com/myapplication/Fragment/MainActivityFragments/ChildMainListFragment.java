@@ -14,6 +14,7 @@ import java.util.List;
 import new10.example.com.myapplication.Activity.MainActivity;
 import new10.example.com.myapplication.Model.Recipe;
 import new10.example.com.myapplication.R;
+import new10.example.com.myapplication.Utils.YummyIdlingResource;
 import new10.example.com.myapplication.ViewModel.MainActivityViewModels.MainRecipesFragmentViewModel;
 
 public class ChildMainListFragment extends ParentFragmentForMainlist {
@@ -25,15 +26,17 @@ public class ChildMainListFragment extends ParentFragmentForMainlist {
         super.onActivityCreated(savedInstanceState);
         //we intialize the view model here and not in oncreate because we want the data to be updated every time we create a view as
         // there is alife cycle for the fragmet instance and another for the view it contains so if we set the view model in oncreate
-        //the data will not be updated as it is linked to the life cycle of the fragment itself we also want to be sure that the Activity is created
+        //the data will not be updated as it is linked to the life cycle of the fragment itself we also want to be sure that the Activity is create
+        YummyIdlingResource yummyIdlingResource = (YummyIdlingResource)((MainActivity)getActivity()).getIdlingResource();
+        yummyIdlingResource.setIdleState(false);
         viewModel = ViewModelProviders.of(getActivity()).get(MainRecipesFragmentViewModel.class);
         ((MainActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.app_name));
         viewModel.getRecipes().observe(getViewLifecycleOwner(), new Observer<List<Recipe>>() {
             @Override
             public void onChanged(List<Recipe> recipes) {
                 recipesList = recipes;
-
                 adapter.setRecipes(recipesList);
+                yummyIdlingResource.setIdleState(true);
             }
         });
 

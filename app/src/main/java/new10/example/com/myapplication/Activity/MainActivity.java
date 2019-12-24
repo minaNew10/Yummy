@@ -1,10 +1,14 @@
 package new10.example.com.myapplication.Activity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.test.espresso.IdlingResource;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -13,6 +17,7 @@ import new10.example.com.myapplication.Fragment.MainActivityFragments.ChildFavLi
 import new10.example.com.myapplication.Fragment.MainActivityFragments.ChildMainListFragment;
 
 import new10.example.com.myapplication.R;
+import new10.example.com.myapplication.Utils.YummyIdlingResource;
 import new10.example.com.myapplication.ViewModel.MainActivityViewModels.MainActivityViewModel;
 
 public class MainActivity extends AppCompatActivity{
@@ -20,11 +25,13 @@ public class MainActivity extends AppCompatActivity{
     ChildFavListFragment favFragment;
     FragmentManager fragmentManager;
     MainActivityViewModel viewModel;
-
+    @Nullable YummyIdlingResource idlingResource;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getIdlingResource();
+
         setupViewModel();
         fragmentManager = getSupportFragmentManager();
         if(savedInstanceState == null) {
@@ -79,5 +86,14 @@ public class MainActivity extends AppCompatActivity{
             ft.addToBackStack(tag);
             ft.commit();
         }
+    }
+
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (idlingResource == null) {
+            idlingResource = new YummyIdlingResource();
+        }
+        return idlingResource;
     }
 }
